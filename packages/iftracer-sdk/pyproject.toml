@@ -10,6 +10,16 @@ show_missing = true
 name = "iftracer-sdk"
 version = "0.1.0"
 description = "Iftracer Software Development Kit (SDK) for Python"
+authors = [
+  "Gal Kleinman <gal@traceloop.com>",
+  "Nir Gazit <nir@traceloop.com>",
+  "Tomer Friedman <tomer@traceloop.com>",
+  "Zhixuan Zhou <zhixuan@insightfinder.com>"
+]
+repository = "https://github.com/traceloop/openllmetry"
+documentation = "https://traceloop.com/docs/openllmetry"
+license = "Apache-2.0"
+readme = "README.md"
 
 [[tool.poetry.packages]]
 include = "iftracer/sdk"
