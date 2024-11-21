@@ -3,7 +3,7 @@ Iftracer is a set of extensions built on top of [OpenTelemetry](https://opentele
 
 It's built and maintained by Iftracer under the Apache 2.0 license.
 
-The repo contains standard OpenTelemetry instrumentations for LLM providers and Vector DBs, as well as a Traceloop SDK that makes it easy to get started with OpenLLMetry, while still outputting standard OpenTelemetry data that can be connected to your observability stack.
+The repo contains standard OpenTelemetry instrumentations for LLM providers and Vector DBs, as well as a Iftracer SDK that makes it easy to get started with OpenLLMetry, while still outputting standard OpenTelemetry data that can be connected to your observability stack.
 If you already have OpenTelemetry instrumented, you can just add any of our instrumentations directly.
 
 ## 🚀 Getting Started
