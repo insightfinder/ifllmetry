@@ -1,4 +1,3 @@
-
 Iftracer is a set of extensions built on top of [OpenTelemetry](https://opentelemetry.io/) that gives you complete observability over your LLM application. Because it uses OpenTelemetry under the hood, it can be connected to your existing observability solutions - Datadog, Honeycomb, and others.
 
 It's built and maintained by Iftracer under the Apache 2.0 license.
