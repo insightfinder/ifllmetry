@@ -1,3 +1,4 @@
+
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
@@ -41,6 +42,7 @@ Thumbs.db
 .cache/
 reports/
 .vscode/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -126,7 +128,6 @@ target/
 profile_default/
 ipython_config.py
 
-
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
@@ -155,6 +156,7 @@ ipython_config.py
 .pdm.toml
 .pdm-python
 .pdm-build/
+
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
 

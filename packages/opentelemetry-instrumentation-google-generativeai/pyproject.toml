@@ -14,7 +14,7 @@ authors = [
   "Gal Kleinman <gal@traceloop.com>",
   "Nir Gazit <nir@traceloop.com>",
 ]
-repository = "https://github.com/traceloop/ifllmetry/tree/main/packages/opentelemetry-instrumentation-google-generativeai"
+repository = "https://github.com/traceloop/openllmetry/tree/main/packages/opentelemetry-instrumentation-google-generativeai"
 license = "Apache-2.0"
 readme = "README.md"
 

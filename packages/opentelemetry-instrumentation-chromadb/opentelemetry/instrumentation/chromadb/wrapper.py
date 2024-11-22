@@ -224,7 +224,7 @@ def _add_query_result_events(span, kwargs):
         ]
 
     If you'd like to understand better why, please read the discussions on PR #370:
-    https://github.com/traceloop/ifllmetry/pull/370
+    https://github.com/traceloop/openllmetry/pull/370
 
     The goal is to set a canonical format which we call as a Semantic Convention.
     """
