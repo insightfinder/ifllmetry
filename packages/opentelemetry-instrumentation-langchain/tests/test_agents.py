@@ -18,7 +18,7 @@ def test_agents(exporter):
     agent = create_tool_calling_agent(model, tools, prompt)
     agent_executor = AgentExecutor(agent=agent, tools=tools)
 
-    agent_executor.invoke({"input": "What is OpenLLMetry?"})
+    agent_executor.invoke({"input": "What is Ifllmetry?"})
 
     spans = exporter.get_finished_spans()
 

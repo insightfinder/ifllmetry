@@ -15,7 +15,7 @@ authors = [
   "Nir Gazit <nir@traceloop.com>",
   "Benedikt Wolf <bene25@web.de>",
 ]
-repository = "https://github.com/traceloop/openllmetry/tree/main/packages/opentelemetry-instrumentation-alephalpha"
+repository = "https://github.com/traceloop/ifllmetry/tree/main/packages/opentelemetry-instrumentation-alephalpha"
 license = "Apache-2.0"
 readme = "README.md"
 

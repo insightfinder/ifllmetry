@@ -5,7 +5,7 @@ from opentelemetry.semconv.ai import SpanAttributes
 @pytest.mark.vcr
 def test_chat(exporter, azure_openai_client):
     azure_openai_client.chat.completions.create(
-        model="openllmetry-testing",
+        model="ifllmetry-testing",
         messages=[{"role": "user", "content": "Tell me a joke about opentelemetry"}],
     )
 
@@ -30,7 +30,7 @@ def test_chat(exporter, azure_openai_client):
 @pytest.mark.vcr
 def test_chat_content_filtering(exporter, azure_openai_client):
     azure_openai_client.chat.completions.create(
-        model="openllmetry-testing",
+        model="ifllmetry-testing",
         messages=[{"role": "user", "content": "Tell me a joke about opentelemetry"}],
     )
 
@@ -58,7 +58,7 @@ def test_chat_content_filtering(exporter, azure_openai_client):
 @pytest.mark.vcr
 def test_chat_streaming(exporter, azure_openai_client):
     response = azure_openai_client.chat.completions.create(
-        model="openllmetry-testing",
+        model="ifllmetry-testing",
         messages=[{"role": "user", "content": "Tell me a joke about opentelemetry"}],
         stream=True,
     )
@@ -92,7 +92,7 @@ def test_chat_streaming(exporter, azure_openai_client):
 @pytest.mark.asyncio
 async def test_chat_async_streaming(exporter, async_azure_openai_client):
     response = await async_azure_openai_client.chat.completions.create(
-        model="openllmetry-testing",
+        model="ifllmetry-testing",
         messages=[{"role": "user", "content": "Tell me a joke about opentelemetry"}],
         stream=True,
     )
