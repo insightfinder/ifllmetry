@@ -11,7 +11,7 @@ name = "opentelemetry-instrumentation-replicate"
 version = "0.25.6"
 description = "OpenTelemetry Replicate instrumentation"
 authors = [ "Kartik Prajapati <kartik@ktklab.org>" ]
-repository = "https://github.com/traceloop/ifllmetry/tree/main/packages/opentelemetry-instrumentation-replicate"
+repository = "https://github.com/traceloop/openllmetry/tree/main/packages/opentelemetry-instrumentation-replicate"
 license = 'Apache-2.0'
 readme = 'README.md'
 

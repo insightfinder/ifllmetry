@@ -39,7 +39,7 @@ def dont_throw(func):
             return func(*args, **kwargs)
         except Exception as e:
             logger.debug(
-                "Ifllmetry failed to trace in %s, error: %s", func.__name__, str(e)
+                "OpenLLMetry failed to trace in %s, error: %s", func.__name__, str(e)
             )
             if Config.exception_logger:
                 Config.exception_logger(e)
@@ -110,7 +110,7 @@ def dont_throw(func):
             return func(*args, **kwargs)
         except Exception as e:
             logger.debug(
-                "Ifllmetry failed to trace in %s, error: %s",
+                "OpenLLMetry failed to trace in %s, error: %s",
                 func.__name__,
                 traceback.format_exc(),
             )

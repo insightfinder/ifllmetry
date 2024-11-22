@@ -14,7 +14,7 @@ authors = [
   "Gal Kleinman <gal@traceloop.com>",
   "Nir Gazit <nir@traceloop.com>",
 ]
-repository = "https://github.com/traceloop/ifllmetry/tree/main/packages/opentelemetry-instrumentation-ollama"
+repository = "https://github.com/traceloop/openllmetry/tree/main/packages/opentelemetry-instrumentation-ollama"
 license = "Apache-2.0"
 readme = "README.md"
 

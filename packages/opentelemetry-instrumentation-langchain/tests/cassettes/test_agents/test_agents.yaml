@@ -72,7 +72,7 @@ interactions:
   - request:
       body:
         '{"messages": [{"content": "You are a helpful assistant", "role": "system"},
-        {"content": "What is Ifllmetry?", "role": "user"}], "model": "gpt-3.5-turbo",
+        {"content": "What is OpenLLMetry?", "role": "user"}], "model": "gpt-3.5-turbo",
         "logprobs": false, "n": 1, "stream": true, "temperature": 0.7, "tools": [{"type":
         "function", "function": {"name": "tavily_search_results_json", "description":
         "A search engine optimized for comprehensive, accurate, and trusted results.
@@ -198,7 +198,7 @@ interactions:
         code: 200
         message: OK
   - request:
-      body: '{"query": "Ifllmetry",
+      body: '{"query": "OpenLLMetry",
         "max_results": 2, "search_depth": "advanced", "include_domains": [], "exclude_domains":
         [], "include_answer": false, "include_raw_content": false, "include_images":
         false}'
@@ -220,17 +220,17 @@ interactions:
     response:
       body:
         string:
-          '{"query":"Ifllmetry","follow_up_questions":null,"answer":null,"images":[],"results":[{"title":"GitHub
-          - iftracer/ifllmetry: Open-source observability for your LLM ...","url":"https://github.com/iftracer/ifllmetry","content":"Ifllmetry
+          '{"query":"OpenLLMetry","follow_up_questions":null,"answer":null,"images":[],"results":[{"title":"GitHub
+          - iftracer/openllmetry: Open-source observability for your LLM ...","url":"https://github.com/iftracer/openllmetry","content":"OpenLLMetry
           is a set of extensions built on top of OpenTelemetry that gives you complete
           observability over your LLM application. It can instrument LLM providers,
           Vector DBs, and other components, and connect to your existing observability
-          solutions.","score":0.98549,"raw_content":null},{"title":"What is Ifllmetry?
-          - iftracer","url":"https://www.iftracer.com/docs/ifllmetry/introduction","content":"Ifllmetry
+          solutions.","score":0.98549,"raw_content":null},{"title":"What is OpenLLMetry?
+          - iftracer","url":"https://www.iftracer.com/docs/openllmetry/introduction","content":"OpenLLMetry
           is an open source project that allows you to easily start monitoring and debugging
           the execution of your LLM app. Tracing is done in a non-intrusive way, built
           on top of OpenTelemetry. You can choose to export the traces to Iftracer,
-          or to your existing observability stack. You can use Ifllmetry whether you
+          or to your existing observability stack. You can use OpenLLMetry whether you
           use a framework like ...","score":0.98309,"raw_content":null}],"response_time":0.72}'
       headers:
         Connection:
@@ -249,19 +249,19 @@ interactions:
   - request:
       body:
         '{"messages": [{"content": "You are a helpful assistant", "role": "system"},
-        {"content": "What is Ifllmetry?", "role": "user"}, {"content": null, "role":
+        {"content": "What is OpenLLMetry?", "role": "user"}, {"content": null, "role":
         "assistant", "tool_calls": [{"type": "function", "id": "call_WUq3aes9z45zmftriVDL7hLL",
         "function": {"name": "tavily_search_results_json", "arguments": "{\"query\":
-        \"Ifllmetry\"}"}}]}, {"content": "[{\"url\": \"https://github.com/iftracer/ifllmetry\",
-        \"content\": \"Ifllmetry is a set of extensions built on top of OpenTelemetry
+        \"OpenLLMetry\"}"}}]}, {"content": "[{\"url\": \"https://github.com/iftracer/openllmetry\",
+        \"content\": \"OpenLLMetry is a set of extensions built on top of OpenTelemetry
         that gives you complete observability over your LLM application. It can instrument
         LLM providers, Vector DBs, and other components, and connect to your existing
-        observability solutions.\"}, {\"url\": \"https://www.iftracer.com/docs/ifllmetry/introduction\",
-        \"content\": \"Ifllmetry is an open source project that allows you to easily
+        observability solutions.\"}, {\"url\": \"https://www.iftracer.com/docs/openllmetry/introduction\",
+        \"content\": \"OpenLLMetry is an open source project that allows you to easily
         start monitoring and debugging the execution of your LLM app. Tracing is done
         in a non-intrusive way, built on top of OpenTelemetry. You can choose to export
         the traces to Iftracer, or to your existing observability stack. You can use
-        Ifllmetry whether you use a framework like ...\"}]", "role": "tool", "tool_call_id":
+        OpenLLMetry whether you use a framework like ...\"}]", "role": "tool", "tool_call_id":
         "call_WUq3aes9z45zmftriVDL7hLL"}], "model": "gpt-3.5-turbo", "logprobs": false,
         "n": 1, "stream": true, "temperature": 0.7, "tools": [{"type": "function", "function":
         {"name": "tavily_search_results_json", "description": "A search engine optimized
