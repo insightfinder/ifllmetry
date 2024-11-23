@@ -79,7 +79,7 @@ def _find_value_from_keys_list(dict, keys_list):
     for key in keys_list:
         if dict[key] is not None:
             return dict[key]
-    return None
+    return []
 
 
 '''

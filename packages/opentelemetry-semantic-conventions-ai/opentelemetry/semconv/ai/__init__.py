@@ -117,6 +117,14 @@ class SpanAttributes:
     INSIGHTFINDER_ENTITY_EVAL_DURATION = "insightfinder.entity.eval_duration"
     INSIGHTFINDER_ENTITY_LLM_MODEL_NAME = "insightfinder.entity.llm_model_name"
     INSIGHTFINDER_ENTITY_EMBEDDING_MODEL_NAME = "insightfinder.entity.embedding_model_name"
+    INSIGHTFINDER_ENTITY_VECTOR_STORE_COLLECTION_NAME = "insightfinder.entity.vector_store_collection_name"
+    INSIGHTFINDER_ENTITY_VECTOR_STORE_COLLECTION_METADATA = "insightfinder.entity.vector_store_collection_metadata"
+    INSIGHTFINDER_ENTITY_DOCS_USED = "insightfinder.entity.docs_used"
+    INSIGHTFINDER_ENTITY_REDIS_URL = "insightfinder.entity.redis_url"
+    INSIGHTFINDER_ENTITY_RAG_CONFIG_COMPANY = "insightfinder.entity.rag_config_company"
+    INSIGHTFINDER_ENTITY_RAG_CONFIG_DATASET = "insightfinder.entity.rag_config_dataset"
+    INSIGHTFINDER_ENTITY_RAG_CONFIG_MODEL_FIELDS_SET = "insightfinder.entity.rag_config_model_fields_set"
+
     
 
     # Prompts
