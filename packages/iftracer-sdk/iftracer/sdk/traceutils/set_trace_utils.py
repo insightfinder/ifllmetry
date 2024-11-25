@@ -79,7 +79,7 @@ def _find_value_from_keys_list(dict, keys_list):
     for key in keys_list:
         if dict[key] is not None:
             return dict[key]
-    return []
+    return None
 
 
 '''
@@ -99,8 +99,8 @@ def _set_res_dict_values_cnt(list, res_dict, keys_list, depth):
                 _set_res_dict_values_cnt(data, res_dict, keys_list, depth+1)
             else:
                 _set_field_value_cnt(data, res_dict, keys_list, 0)
-    else:
-        _set_field_value_cnt(data, res_dict, keys_list, 0)
+    # else:
+    #     _set_field_value_cnt(data, res_dict, keys_list, 0)
 
 def _set_field_value_cnt(data, res_dict, keys_list, depth):
     if depth >= MAX_DEPTH or keys_list is None or keys_list == []:
