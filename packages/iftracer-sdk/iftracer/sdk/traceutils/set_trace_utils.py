@@ -94,7 +94,7 @@ def _add_result_traces_to_spans(span: Span, res: Dict[str, Any] , *args, **kwarg
         if vectorstore.collection_name is not None: 
             span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_VECTOR_STORE_COLLECTION_NAME, vectorstore.collection_name )
         if vectorstore.collection_metadata is not None:
-            span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_VECTOR_STORE_COLLECTION_METADATA, str(vectorstore.collection_metadata))
+            span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_VECTOR_STORE_COLLECTION_METADATA, vectorstore.collection_metadata)
 
     docs_used = _find_value_from_keys_list(keys_dict, INSIGHTFINDER_ENTITY_DOCS_USED)
     if docs_used is not None:
@@ -104,13 +104,13 @@ def _add_result_traces_to_spans(span: Span, res: Dict[str, Any] , *args, **kwarg
     if redis_url is not None:
         span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_REDIS_URL, redis_url)
 
-    rag_config = _find_value_from_keys_list(keys_dict, INSIGHTFINDER_ENTITY_RAG_CONFIG)
+    rag_config = _find_value_from_keys_list(keys_dict, INSIGHTFINDER_ENTITY_RAG_CONFIG) # type: RagConfigDto
     if rag_config is not None:
-        if rag_config.company is not None:
+        if hasattr(rag_config, 'company') and rag_config.company is not None:
             span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_RAG_CONFIG_COMPANY, rag_config.company )
-        if rag_config.dataset is not None:
-            span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_RAG_CONFIG_DATASET, rag_config.dataset )
-        if rag_config.model_fields_set is not None:
+        if hasattr(rag_config, 'dataset_id') and rag_config.dataset_id is not None:
+            span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_RAG_CONFIG_DATASET, rag_config.dataset_id )
+        if hasattr(rag_config, 'model_fields_set') and rag_config.model_fields_set is not None:
             span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_RAG_CONFIG_MODEL_FIELDS_SET, rag_config.model_fields_set )
 
 
