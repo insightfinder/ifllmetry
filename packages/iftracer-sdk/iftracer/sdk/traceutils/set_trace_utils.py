@@ -94,12 +94,12 @@ def _add_result_traces_to_spans(span: Span, res: Dict[str, Any] , *args, **kwarg
         if vectorstore.collection_name is not None: 
             span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_VECTOR_STORE_COLLECTION_NAME, vectorstore.collection_name )
         if vectorstore.collection_metadata is not None:
-            span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_VECTOR_STORE_COLLECTION_METADATA, vectorstore.collection_metadata)
+            span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_VECTOR_STORE_COLLECTION_METADATA, str(vectorstore.collection_metadata))
 
     docs_used = _find_value_from_keys_list(keys_dict, INSIGHTFINDER_ENTITY_DOCS_USED)
     if docs_used is not None:
         span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_DOCS_USED, docs_used)
-        
+
     redis_url = _find_value_from_keys_list(keys_dict, INSIGHTFINDER_ENTITY_REDIS_URL)
     if redis_url is not None:
         span.set_attribute(SpanAttributes.INSIGHTFINDER_ENTITY_REDIS_URL, redis_url)
