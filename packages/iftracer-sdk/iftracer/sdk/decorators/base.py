@@ -77,8 +77,7 @@ def entity_method(
                 if entity_name == TRACE_MODEL_RESPONSE:
                     _add_model_traces_to_spans(span, res, args, kwargs)
                 if tlp_span_kind in [
-                    TraceloopSpanKindValues.WORKFLOW,
-                    TraceloopSpanKindValues.AWORKFLOW
+                    TraceloopSpanKindValues.WORKFLOW
                 ]:
                     _add_result_traces_to_spans(span, res, args, kwargs)
                 # span will be ended in the generator
@@ -145,7 +144,8 @@ def aentity_method(
                 TraceloopSpanKindValues.AGENT,
             ]:
                 set_workflow_name(entity_name)
-            span_name = f"{entity_name}.{tlp_span_kind.value}"
+            span_name = (f"{name}.{tlp_span_kind.value}" if name else f"{fn.__name__}.{tlp_span_kind.value}")
+
 
             with get_tracer() as tracer:
                 span = tracer.start_span(span_name)
@@ -183,8 +183,7 @@ def aentity_method(
                 if entity_name == TRACE_MODEL_RESPONSE:
                     _add_model_traces_to_spans(span, res, args, kwargs)
                 if tlp_span_kind in [
-                    TraceloopSpanKindValues.WORKFLOW,
-                    TraceloopSpanKindValues.AWORKFLOW
+                    TraceloopSpanKindValues.WORKFLOW
                 ]:
                     _add_result_traces_to_spans(span, res, args, kwargs)
                 # span will be ended in the generator
