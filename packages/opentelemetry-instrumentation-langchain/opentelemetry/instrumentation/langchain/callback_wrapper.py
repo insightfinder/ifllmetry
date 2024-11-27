@@ -364,13 +364,13 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Run when chain ends running."""
         span = self._get_span(run_id) 
-        content_in_outputs = "content" in outputs
+        content_in_outputs = hasattr(outputs, "content")
         outputs_content = outputs["content"] if content_in_outputs else outputs
         if should_send_prompts():
             span.set_attribute(
                 SpanAttributes.TRACELOOP_ENTITY_OUTPUT,
                 json.dumps(
-                    {"outputs": outputs_content, "kwargs": kwargs, **(outputs if content_in_outputs else {})}, cls=CustomJsonEncode
+                    {"outputs": outputs_content, "kwargs2": kwargs, **(outputs if content_in_outputs else {})}, cls=CustomJsonEncode
                 ),
             )
         self._end_span(span, run_id)
