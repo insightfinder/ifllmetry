@@ -338,7 +338,7 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
                 else TraceloopSpanKindValues.TASK
             ),
         )
-        formattedInputs = '. '.join(str(val) for val in inputs.values())
+        formattedInputs = '. '.join(str(val) for val in inputs.values() if val != [] and val is not None)
         if should_send_prompts():
             span.set_attribute(
                 SpanAttributes.TRACELOOP_ENTITY_INPUT,
@@ -363,13 +363,14 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
         **kwargs: Any,
     ) -> None:
         """Run when chain ends running."""
-        span = self._get_span(run_id)
-        outputs_content = outputs["content"] if "content" in outputs else outputs
+        span = self._get_span(run_id) 
+        content_in_outputs = "content" in outputs
+        outputs_content = outputs["content"] if content_in_outputs else outputs
         if should_send_prompts():
             span.set_attribute(
                 SpanAttributes.TRACELOOP_ENTITY_OUTPUT,
                 json.dumps(
-                    {"outputs": outputs_content, "kwargs": kwargs, **outputs}, cls=CustomJsonEncode
+                    {"outputs": outputs_content, "kwargs": kwargs, **(outputs if content_in_outputs else {})}, cls=CustomJsonEncode
                 ),
             )
         self._end_span(span, run_id)
