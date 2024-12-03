@@ -338,7 +338,7 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
                 else TraceloopSpanKindValues.TASK
             ),
         )
-        formattedInputs = '. '.join(str(val) for val in inputs.values() if val != [] and val is not None)
+        formattedInputs = '. '.join(str(val) for val in inputs.values() if val != [] and val is not None) if type(input) is list else inputs 
         if should_send_prompts():
             span.set_attribute(
                 SpanAttributes.TRACELOOP_ENTITY_INPUT,
