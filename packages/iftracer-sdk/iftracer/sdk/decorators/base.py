@@ -74,11 +74,14 @@ def entity_method(
                     Telemetry().log_exception(e)
 
                 res = fn(*args, **kwargs)
+                # if entity_name == STR_OUTPUT_PARSER:  # todo: Not working. STR_OUTPUT_PARSER is not using entity_method
+                #     _add_str_model_traces_to_spans(span, res, args, kwargs)
                 if entity_name == TRACE_MODEL_RESPONSE:
                     _add_model_traces_to_spans(span, res, args, kwargs)
-                if tlp_span_kind in [
+                elif tlp_span_kind in [
                     TraceloopSpanKindValues.WORKFLOW
                 ]:
+                    _add_model_traces_to_spans(span, res, args, kwargs)
                     _add_result_traces_to_spans(span, res, args, kwargs)
                 # span will be ended in the generator
                 if isinstance(res, types.GeneratorType):
@@ -144,7 +147,8 @@ def aentity_method(
                 TraceloopSpanKindValues.AGENT,
             ]:
                 set_workflow_name(entity_name)
-            span_name = f"{entity_name}.{tlp_span_kind.value}"
+            span_name = (f"{name}.{tlp_span_kind.value}" if name else f"{fn.__name__}.{tlp_span_kind.value}")
+
 
             with get_tracer() as tracer:
                 span = tracer.start_span(span_name)
@@ -179,11 +183,14 @@ def aentity_method(
                     Telemetry().log_exception(e)
 
                 res = await fn(*args, **kwargs)
+                # if entity_name == STR_OUTPUT_PARSER: # May need to change opentelemetry-instrument-langchain to process the STR_OUTPUT_PARSER contents
+                #     _add_str_model_traces_to_spans(span, res, args, kwargs)
                 if entity_name == TRACE_MODEL_RESPONSE:
                     _add_model_traces_to_spans(span, res, args, kwargs)
-                if tlp_span_kind in [
+                elif tlp_span_kind in [
                     TraceloopSpanKindValues.WORKFLOW
                 ]:
+                    _add_model_traces_to_spans(span, res, args, kwargs)
                     _add_result_traces_to_spans(span, res, args, kwargs)
                 # span will be ended in the generator
                 if isinstance(res, types.AsyncGeneratorType):

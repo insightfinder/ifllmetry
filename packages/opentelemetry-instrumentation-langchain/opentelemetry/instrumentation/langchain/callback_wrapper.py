@@ -236,7 +236,7 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
         **kwargs: Any,
     ) -> str:
         """Get the name to be used for the span. Based on heuristic. Can be extended."""
-        if "kwargs" in serialized and serialized["kwargs"].get("name"):
+        if serialized and "kwargs" in serialized and serialized["kwargs"].get("name"):
             return serialized["kwargs"]["name"]
         if kwargs.get("name"):
             return kwargs["name"]
@@ -338,12 +338,13 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
                 else TraceloopSpanKindValues.TASK
             ),
         )
+        formattedInputs = '. '.join(str(val) for val in inputs.values() if val != [] and val is not None) if type(inputs) is dict else inputs 
         if should_send_prompts():
             span.set_attribute(
                 SpanAttributes.TRACELOOP_ENTITY_INPUT,
                 json.dumps(
                     {
-                        "inputs": inputs,
+                        "inputs": formattedInputs,
                         "tags": tags,
                         "metadata": metadata,
                         "kwargs": kwargs,
@@ -363,11 +364,15 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Run when chain ends running."""
         span = self._get_span(run_id)
+        content_in_outputs = hasattr(outputs, "content") # 1. content field is in outputs 2. outputs is an obj instead of dict
+        outputs_content = outputs.content if content_in_outputs else outputs
+        other_res_buf = {**( outputs.__dict__  if content_in_outputs else {})}
+        other_res = {k: v for k, v in other_res_buf.items() if k != 'content'} if content_in_outputs else {}  # hide the content field as it should be the same as outputs
         if should_send_prompts():
             span.set_attribute(
                 SpanAttributes.TRACELOOP_ENTITY_OUTPUT,
                 json.dumps(
-                    {"outputs": outputs, "kwargs": kwargs}, cls=CustomJsonEncode
+                    {"outputs": outputs_content, "kwargs": kwargs, **other_res}, cls=CustomJsonEncode
                 ),
             )
         self._end_span(span, run_id)
