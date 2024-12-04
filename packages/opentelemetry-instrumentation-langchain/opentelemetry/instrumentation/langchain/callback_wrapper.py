@@ -363,7 +363,7 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
         **kwargs: Any,
     ) -> None:
         """Run when chain ends running."""
-        span = self._get_span(run_id) 
+        span = self._get_span(run_id)
         content_in_outputs = hasattr(outputs, "content") # 1. content field is in outputs 2. outputs is an obj instead of dict
         outputs_content = outputs.content if content_in_outputs else outputs
         other_res = {**( outputs.__dict__  if content_in_outputs else {})}
