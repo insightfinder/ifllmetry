@@ -366,11 +366,13 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
         span = self._get_span(run_id) 
         content_in_outputs = hasattr(outputs, "content") # 1. content field is in outputs 2. outputs is an obj instead of dict
         outputs_content = outputs.content if content_in_outputs else outputs
+        other_res = {**( outputs.__dict__  if content_in_outputs else {})}
+        other_res = {k: v for k, v in other_res.__dict__.items() if k != 'content'}  # hide the content field as it should be the same as outputs
         if should_send_prompts():
             span.set_attribute(
                 SpanAttributes.TRACELOOP_ENTITY_OUTPUT,
                 json.dumps(
-                    {"outputs": outputs_content, "kwargs": kwargs, **( outputs.__dict__  if content_in_outputs else {})}, cls=CustomJsonEncode
+                    {"outputs": outputs_content, "kwargs": kwargs, **other_res}, cls=CustomJsonEncode
                 ),
             )
         self._end_span(span, run_id)
