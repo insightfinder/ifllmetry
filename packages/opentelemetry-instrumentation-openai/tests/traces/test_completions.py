@@ -70,8 +70,8 @@ def test_completion_langchain_style(exporter, openai_client):
 @pytest.mark.vcr
 def test_completion_streaming(exporter, openai_client):
     # set os env for token usage record in stream mode
-    original_value = os.environ.get("TRACELOOP_STREAM_TOKEN_USAGE")
-    os.environ["TRACELOOP_STREAM_TOKEN_USAGE"] = "true"
+    original_value = os.environ.get("IFTRACER_STREAM_TOKEN_USAGE")
+    os.environ["IFTRACER_STREAM_TOKEN_USAGE"] = "true"
 
     try:
         response = openai_client.completions.create(
@@ -115,9 +115,9 @@ def test_completion_streaming(exporter, openai_client):
     finally:
         # unset env
         if original_value is None:
-            del os.environ["TRACELOOP_STREAM_TOKEN_USAGE"]
+            del os.environ["IFTRACER_STREAM_TOKEN_USAGE"]
         else:
-            os.environ["TRACELOOP_STREAM_TOKEN_USAGE"] = original_value
+            os.environ["IFTRACER_STREAM_TOKEN_USAGE"] = original_value
 
 
 @pytest.mark.vcr

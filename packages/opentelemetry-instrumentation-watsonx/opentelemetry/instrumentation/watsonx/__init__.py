@@ -114,12 +114,12 @@ def _set_api_attributes(span):
 
 def should_send_prompts():
     return (
-        os.getenv("TRACELOOP_TRACE_CONTENT") or "true"
+        os.getenv("IFTRACER_TRACE_CONTENT") or "true"
     ).lower() == "true" or context_api.get_value("override_enable_content_tracing")
 
 
 def is_metrics_enabled() -> bool:
-    return (os.getenv("TRACELOOP_METRICS_ENABLED") or "true").lower() == "true"
+    return (os.getenv("IFTRACER_METRICS_ENABLED") or "true").lower() == "true"
 
 
 def _set_input_attributes(span, instance, kwargs):

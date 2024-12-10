@@ -1,7 +1,7 @@
 import litellm
 
 
-def test_traceloop_logging():
+def test_iftracer_logging():
     try:
         litellm.success_callback = ["iftracer"]
         from iftracer.sdk import Iftracer
@@ -21,4 +21,4 @@ def test_traceloop_logging():
         pass
 
 
-test_traceloop_logging()
+test_iftracer_logging()

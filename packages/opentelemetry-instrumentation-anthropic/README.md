@@ -26,8 +26,8 @@ AnthropicInstrumentor().instrument()
 
 However, you may want to disable this logging for privacy reasons, as they may contain highly sensitive data from your users. You may also simply want to reduce the size of your traces.
 
-To disable logging, set the `TRACELOOP_TRACE_CONTENT` environment variable to `false`.
+To disable logging, set the `IFTRACER_TRACE_CONTENT` environment variable to `false`.
 
 ```bash
-TRACELOOP_TRACE_CONTENT=false
+IFTRACER_TRACE_CONTENT=false
 ```

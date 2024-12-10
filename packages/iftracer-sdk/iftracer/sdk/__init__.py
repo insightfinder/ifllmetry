@@ -40,8 +40,7 @@ class Iftracer:
     @staticmethod
     def init(
         app_name: Optional[str] = sys.argv[0],
-        api_endpoint: str = "https://api.traceloop.com",
-        api_key: str = None,
+        api_endpoint: str = "",
         headers: Dict[str, str] = {},
         disable_batch=False,
         exporter: SpanExporter = None,
@@ -49,28 +48,14 @@ class Iftracer:
         metrics_headers: Dict[str, str] = None,
         processor: SpanProcessor = None,
         propagator: TextMapPropagator = None,
-        traceloop_sync_enabled: bool = True,
         should_enrich_metrics: bool = True,
         resource_attributes: dict = {},
         instruments: Optional[Set[Instruments]] = None,
     ) -> None:
         Telemetry()
 
-        api_endpoint = os.getenv("TRACELOOP_BASE_URL") or api_endpoint
-        api_key = os.getenv("TRACELOOP_API_KEY") or api_key
-
-        if (
-            traceloop_sync_enabled
-            and api_endpoint.find("iftracer.com") != -1
-            and api_key
-            and not exporter
-            and not processor
-        ):
-            Iftracer.__fetcher = Fetcher(base_url=api_endpoint, api_key=api_key)
-            Iftracer.__fetcher.run()
-            print(
-                Fore.GREEN + "Iftracer syncing configuration and prompts" + Fore.RESET
-            )
+        api_endpoint = os.getenv("IFTRACER_BASE_URL") or api_endpoint
+        api_key = None # Disable the usage of api_key
 
         if not is_tracing_enabled():
             print(Fore.YELLOW + "Tracing is disabled" + Fore.RESET)
@@ -81,25 +66,10 @@ class Iftracer:
         if exporter or processor:
             print(Fore.GREEN + "Iftracer exporting traces to a custom exporter")
 
-        headers = os.getenv("TRACELOOP_HEADERS") or headers
+        headers = os.getenv("IFTRACER_HEADERS") or headers
 
         if isinstance(headers, str):
             headers = parse_env_headers(headers)
-
-        if (
-            not exporter
-            and not processor
-            and api_endpoint == "https://api.traceloop.com"
-            and not api_key
-        ):
-            print(
-                Fore.RED
-                + "Error: Missing Iftracer API key,"
-                + " go to https://app.traceloop.com/settings/api-keys to create one"
-            )
-            print("Set the TRACELOOP_API_KEY environment variable to the key")
-            print(Fore.RESET)
-            return
 
         if not exporter and not processor and headers:
             print(
@@ -135,9 +105,9 @@ class Iftracer:
         if not metrics_exporter and exporter:
             return
 
-        metrics_endpoint = os.getenv("TRACELOOP_METRICS_ENDPOINT") or api_endpoint
+        metrics_endpoint = os.getenv("IFTRACER_METRICS_ENDPOINT") or api_endpoint
         metrics_headers = (
-            os.getenv("TRACELOOP_METRICS_HEADERS") or metrics_headers or headers
+            os.getenv("IFTRACER_METRICS_HEADERS") or metrics_headers or headers
         )
 
         if not is_metrics_enabled() or not metrics_exporter and exporter:
@@ -167,7 +137,7 @@ class Iftracer:
                 + "Error: Cannot report score. Missing Iftracer API key,"
                 + " go to https://app.traceloop.com/settings/api-keys to create one"
             )
-            print("Set the TRACELOOP_API_KEY environment variable to the key")
+            print("Set the IFTRACER_API_KEY environment variable to the key")
             print(Fore.RESET)
             return
 
