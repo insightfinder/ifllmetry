@@ -28,7 +28,7 @@ async def start_as_current_span_async(tracer, *args, **kwargs):
 
 def should_send_prompts():
     return (
-        os.getenv("TRACELOOP_TRACE_CONTENT") or "true"
+        os.getenv("IFTRACER_TRACE_CONTENT") or "true"
     ).lower() == "true" or context_api.get_value("override_enable_content_tracing")
 
 
@@ -72,7 +72,7 @@ class JSONEncoder(json.JSONEncoder):
 def process_request(span, args, kwargs):
     if should_send_prompts():
         span.set_attribute(
-            SpanAttributes.TRACELOOP_ENTITY_INPUT,
+            SpanAttributes.IFTRACER_ENTITY_INPUT,
             json.dumps({"args": args, "kwargs": kwargs}, cls=JSONEncoder),
         )
 
@@ -81,6 +81,6 @@ def process_request(span, args, kwargs):
 def process_response(span, res):
     if should_send_prompts():
         span.set_attribute(
-            SpanAttributes.TRACELOOP_ENTITY_OUTPUT,
+            SpanAttributes.IFTRACER_ENTITY_OUTPUT,
             json.dumps(res, cls=JSONEncoder),
         )

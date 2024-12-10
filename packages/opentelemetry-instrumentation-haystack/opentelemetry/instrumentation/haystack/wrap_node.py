@@ -18,10 +18,10 @@ def wrap(tracer, to_wrap, wrapped, instance, args, kwargs):
     attach(set_value("workflow_name", name))
     with tracer.start_as_current_span(f"{name}.task") as span:
         span.set_attribute(
-            SpanAttributes.TRACELOOP_SPAN_KIND,
+            SpanAttributes.IFTRACER_SPAN_KIND,
             TraceloopSpanKindValues.TASK.value,
         )
-        span.set_attribute(SpanAttributes.TRACELOOP_ENTITY_NAME, name)
+        span.set_attribute(SpanAttributes.IFTRACER_ENTITY_NAME, name)
 
         response = wrapped(*args, **kwargs)
 

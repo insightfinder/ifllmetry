@@ -293,8 +293,8 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
 
         span = self._create_span(run_id, parent_run_id, span_name)
 
-        span.set_attribute(SpanAttributes.TRACELOOP_SPAN_KIND, kind.value)
-        span.set_attribute(SpanAttributes.TRACELOOP_ENTITY_NAME, span_name)
+        span.set_attribute(SpanAttributes.IFTRACER_SPAN_KIND, kind.value)
+        span.set_attribute(SpanAttributes.IFTRACER_ENTITY_NAME, span_name)
 
         return span
 
@@ -341,7 +341,7 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
         formattedInputs = '. '.join(str(val) for val in inputs.values() if val != [] and val is not None) if type(inputs) is dict else inputs 
         if should_send_prompts():
             span.set_attribute(
-                SpanAttributes.TRACELOOP_ENTITY_INPUT,
+                SpanAttributes.IFTRACER_ENTITY_INPUT,
                 json.dumps(
                     {
                         "inputs": formattedInputs,
@@ -370,7 +370,7 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
         other_res = {k: v for k, v in other_res_buf.items() if k != 'content'} if content_in_outputs else {}  # hide the content field as it should be the same as outputs
         if should_send_prompts():
             span.set_attribute(
-                SpanAttributes.TRACELOOP_ENTITY_OUTPUT,
+                SpanAttributes.IFTRACER_ENTITY_OUTPUT,
                 json.dumps(
                     {"outputs": outputs_content, "kwargs": kwargs, **other_res}, cls=CustomJsonEncode
                 ),
@@ -471,7 +471,7 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
         )
         if should_send_prompts():
             span.set_attribute(
-                SpanAttributes.TRACELOOP_ENTITY_INPUT,
+                SpanAttributes.IFTRACER_ENTITY_INPUT,
                 json.dumps(
                     {
                         "input_str": input_str,
@@ -497,7 +497,7 @@ class SyncSpanCallbackHandler(BaseCallbackHandler):
         span = self._get_span(run_id)
         if should_send_prompts():
             span.set_attribute(
-                SpanAttributes.TRACELOOP_ENTITY_OUTPUT,
+                SpanAttributes.IFTRACER_ENTITY_OUTPUT,
                 json.dumps({"output": output, "kwargs": kwargs}, cls=CustomJsonEncode),
             )
         self._end_span(span, run_id)

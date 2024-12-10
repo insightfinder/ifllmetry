@@ -95,13 +95,13 @@ class SpanAttributes:
     PINECONE_QUERY_TOP_K = "pinecone.query.top_k"
 
     # LLM Workflows
-    TRACELOOP_SPAN_KIND = "iftracer.span.kind"
-    TRACELOOP_WORKFLOW_NAME = "iftracer.workflow.name"
-    TRACELOOP_ENTITY_NAME = "iftracer.entity.name"
-    TRACELOOP_ENTITY_VERSION = "iftracer.entity.version"
-    TRACELOOP_ENTITY_INPUT = "iftracer.entity.input"
-    TRACELOOP_ENTITY_OUTPUT = "iftracer.entity.output"
-    TRACELOOP_ASSOCIATION_PROPERTIES = "iftracer.association.properties"
+    IFTRACER_SPAN_KIND = "iftracer.span.kind"
+    IFTRACER_WORKFLOW_NAME = "iftracer.workflow.name"
+    IFTRACER_ENTITY_NAME = "iftracer.entity.name"
+    IFTRACER_ENTITY_VERSION = "iftracer.entity.version"
+    IFTRACER_ENTITY_INPUT = "iftracer.entity.input"
+    IFTRACER_ENTITY_OUTPUT = "iftracer.entity.output"
+    IFTRACER_ASSOCIATION_PROPERTIES = "iftracer.association.properties"
 
     # InsightFinder
     INSIGHTFINDER_ENTITY_ARGS = "insightfinder.entity.args"
@@ -128,16 +128,16 @@ class SpanAttributes:
     
 
     # Prompts
-    TRACELOOP_PROMPT_MANAGED = "iftracer.prompt.managed"
-    TRACELOOP_PROMPT_KEY = "iftracer.prompt.key"
-    TRACELOOP_PROMPT_VERSION = "iftracer.prompt.version"
-    TRACELOOP_PROMPT_VERSION_NAME = "iftracer.prompt.version_name"
-    TRACELOOP_PROMPT_VERSION_HASH = "iftracer.prompt.version_hash"
-    TRACELOOP_PROMPT_TEMPLATE = "iftracer.prompt.template"
-    TRACELOOP_PROMPT_TEMPLATE_VARIABLES = "iftracer.prompt.template_variables"
+    IFTRACER_PROMPT_MANAGED = "iftracer.prompt.managed"
+    IFTRACER_PROMPT_KEY = "iftracer.prompt.key"
+    IFTRACER_PROMPT_VERSION = "iftracer.prompt.version"
+    IFTRACER_PROMPT_VERSION_NAME = "iftracer.prompt.version_name"
+    IFTRACER_PROMPT_VERSION_HASH = "iftracer.prompt.version_hash"
+    IFTRACER_PROMPT_TEMPLATE = "iftracer.prompt.template"
+    IFTRACER_PROMPT_TEMPLATE_VARIABLES = "iftracer.prompt.template_variables"
 
     # Deprecated
-    TRACELOOP_CORRELATION_ID = "iftracer.correlation.id"
+    IFTRACER_CORRELATION_ID = "iftracer.correlation.id"
 
     # Watson/genai LLM
     LLM_DECODING_METHOD = "llm.watsonx.decoding_method"

@@ -56,21 +56,21 @@ def test_sequential_chain(exporter):
     synopsis_span = next(span for span in spans if span.name == "synopsis.task")
     review_span = next(span for span in spans if span.name == "LLMChain.task")
 
-    data = json.loads(synopsis_span.attributes[SpanAttributes.TRACELOOP_ENTITY_INPUT])
+    data = json.loads(synopsis_span.attributes[SpanAttributes.IFTRACER_ENTITY_INPUT])
     assert data["inputs"] == {
         "title": "Tragedy at sunset on the beach",
         "era": "Victorian England",
     }
     assert data["kwargs"]["name"] == "synopsis"
-    data = json.loads(synopsis_span.attributes[SpanAttributes.TRACELOOP_ENTITY_OUTPUT])
+    data = json.loads(synopsis_span.attributes[SpanAttributes.IFTRACER_ENTITY_OUTPUT])
     assert data["outputs"].keys() == {
         "synopsis",
     }
 
-    data = json.loads(review_span.attributes[SpanAttributes.TRACELOOP_ENTITY_INPUT])
+    data = json.loads(review_span.attributes[SpanAttributes.IFTRACER_ENTITY_INPUT])
     assert data["inputs"].keys() == {"title", "era", "synopsis"}
     assert data["kwargs"]["name"] == "LLMChain"
-    data = json.loads(review_span.attributes[SpanAttributes.TRACELOOP_ENTITY_OUTPUT])
+    data = json.loads(review_span.attributes[SpanAttributes.IFTRACER_ENTITY_OUTPUT])
     assert data["outputs"].keys() == {
         "review",
     }
@@ -78,13 +78,13 @@ def test_sequential_chain(exporter):
     overall_span = next(
         span for span in spans if span.name == "SequentialChain.workflow"
     )
-    data = json.loads(overall_span.attributes[SpanAttributes.TRACELOOP_ENTITY_INPUT])
+    data = json.loads(overall_span.attributes[SpanAttributes.IFTRACER_ENTITY_INPUT])
     assert data["inputs"] == {
         "title": "Tragedy at sunset on the beach",
         "era": "Victorian England",
     }
     assert data["kwargs"]["name"] == "SequentialChain"
-    data = json.loads(overall_span.attributes[SpanAttributes.TRACELOOP_ENTITY_OUTPUT])
+    data = json.loads(overall_span.attributes[SpanAttributes.IFTRACER_ENTITY_OUTPUT])
     assert data["outputs"].keys() == {"synopsis", "review"}
 
     openai_span = next(span for span in spans if span.name == "OpenAI.completion")
@@ -147,21 +147,21 @@ async def test_asequential_chain(exporter):
         span for span in spans if span.name == "LLMChain.task"
     ]
 
-    data = json.loads(synopsis_span.attributes[SpanAttributes.TRACELOOP_ENTITY_INPUT])
+    data = json.loads(synopsis_span.attributes[SpanAttributes.IFTRACER_ENTITY_INPUT])
     assert data["inputs"] == {
         "title": "Tragedy at sunset on the beach",
         "era": "Victorian England",
     }
     assert data["kwargs"]["name"] == "LLMChain"
-    data = json.loads(synopsis_span.attributes[SpanAttributes.TRACELOOP_ENTITY_OUTPUT])
+    data = json.loads(synopsis_span.attributes[SpanAttributes.IFTRACER_ENTITY_OUTPUT])
     assert data["outputs"].keys() == {
         "synopsis",
     }
 
-    data = json.loads(review_span.attributes[SpanAttributes.TRACELOOP_ENTITY_INPUT])
+    data = json.loads(review_span.attributes[SpanAttributes.IFTRACER_ENTITY_INPUT])
     assert data["inputs"].keys() == {"title", "era", "synopsis"}
     assert data["kwargs"]["name"] == "LLMChain"
-    data = json.loads(review_span.attributes[SpanAttributes.TRACELOOP_ENTITY_OUTPUT])
+    data = json.loads(review_span.attributes[SpanAttributes.IFTRACER_ENTITY_OUTPUT])
     assert data["outputs"].keys() == {
         "review",
     }
@@ -169,13 +169,13 @@ async def test_asequential_chain(exporter):
     overall_span = next(
         span for span in spans if span.name == "SequentialChain.workflow"
     )
-    data = json.loads(overall_span.attributes[SpanAttributes.TRACELOOP_ENTITY_INPUT])
+    data = json.loads(overall_span.attributes[SpanAttributes.IFTRACER_ENTITY_INPUT])
     assert data["inputs"] == {
         "title": "Tragedy at sunset on the beach",
         "era": "Victorian England",
     }
     assert data["kwargs"]["name"] == "SequentialChain"
-    data = json.loads(overall_span.attributes[SpanAttributes.TRACELOOP_ENTITY_OUTPUT])
+    data = json.loads(overall_span.attributes[SpanAttributes.IFTRACER_ENTITY_OUTPUT])
     assert data["outputs"].keys() == {"synopsis", "review"}
 
 

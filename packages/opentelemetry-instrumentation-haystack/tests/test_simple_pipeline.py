@@ -36,5 +36,5 @@ def test_haystack(exporter):
         "haystack_pipeline.workflow",
     } == {span.name for span in spans}
     span_workflow = next(span for span in spans if span.name == "haystack_pipeline.workflow")
-    assert SpanAttributes.TRACELOOP_ENTITY_INPUT in span_workflow.attributes
-    assert SpanAttributes.TRACELOOP_ENTITY_OUTPUT in span_workflow.attributes
+    assert SpanAttributes.IFTRACER_ENTITY_INPUT in span_workflow.attributes
+    assert SpanAttributes.IFTRACER_ENTITY_OUTPUT in span_workflow.attributes
