@@ -1,6 +1,6 @@
 # OpenTelemetry Mistral AI Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-mistralai/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-mistralai/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-mistralai.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing calls to any of mistralai's endpoints sent with the 
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-mistralai
+pip install opentelemetry-if-instrumentation-mistralai
 ```
 
 ## Example usage

@@ -5,7 +5,7 @@ This library allows tracing IBM Watsonx prompts and completions sent with the of
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-watsonx
+pip install opentelemetry-if-instrumentation-watsonx
 ```
 
 ## Example usage

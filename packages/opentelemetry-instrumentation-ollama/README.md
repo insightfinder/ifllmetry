@@ -1,6 +1,6 @@
 # OpenTelemetry Ollama Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-ollama/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-ollama/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-ollama.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing calls to any of Ollama's endpoints sent with the off
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-ollama
+pip install opentelemetry-if-instrumentation-ollama
 ```
 
 ## Example usage

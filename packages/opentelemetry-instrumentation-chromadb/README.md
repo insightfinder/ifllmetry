@@ -1,6 +1,6 @@
 # OpenTelemetry Chroma Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-chromadb/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-chromadb/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-chromadb.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing client-side calls to Chroma vector DB sent with the 
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-chromadb
+pip install opentelemetry-if-instrumentation-chromadb
 ```
 
 ## Example usage

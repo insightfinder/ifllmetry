@@ -1,6 +1,6 @@
 # OpenTelemetry Together AI Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-together/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-together/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-together.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing calls to any of Together AI's endpoints sent with th
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-together
+pip install opentelemetry-if-instrumentation-together
 ```
 
 ## Example usage

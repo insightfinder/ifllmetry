@@ -1,6 +1,6 @@
 # OpenTelemetry HuggingFace Transformers Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-transformers/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-transformers/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-transformers.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing texte generation calls sent with the official [Huggi
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-transformers
+pip install opentelemetry-if-instrumentation-transformers
 ```
 
 ## Example usage

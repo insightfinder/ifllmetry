@@ -1,6 +1,6 @@
 # OpenTelemetry Weaviate Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-weaviate/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-weaviate/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-weaviate.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing client-side calls to Weaviate vector DB sent with th
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-weaviate
+pip install opentelemetry-if-instrumentation-weaviate
 ```
 
 ## Example usage

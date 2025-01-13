@@ -1,6 +1,6 @@
 # OpenTelemetry Aleph Alpha Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-alephalpha/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-alephalpha/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-alephalpha.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing calls to any of Aleph Alpha's endpoints sent with th
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-alephalpha
+pip install opentelemetry-if-instrumentation-alephalpha
 ```
 
 ## Example usage

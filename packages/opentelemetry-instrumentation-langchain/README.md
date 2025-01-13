@@ -1,6 +1,6 @@
 # OpenTelemetry Langchain Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-langchain/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-langchain/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-langchain.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing complete LLM applications built with [Langchain](htt
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-langchain
+pip install opentelemetry-if-instrumentation-langchain
 ```
 
 ## Example usage

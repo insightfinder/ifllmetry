@@ -1,6 +1,6 @@
 # OpenTelemetry VertexAI Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-vertexai/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-vertexai/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-vertexai.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing VertexAI prompts and completions sent with the offic
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-vertexai
+pip install opentelemetry-if-instrumentation-vertexai
 ```
 
 ## Example usage

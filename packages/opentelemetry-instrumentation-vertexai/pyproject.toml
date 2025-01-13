@@ -7,7 +7,7 @@ exclude_lines = ['if TYPE_CHECKING:']
 show_missing = true
 
 [tool.poetry]
-name = "opentelemetry-instrumentation-vertexai"
+name = "opentelemetry-if-instrumentation-vertexai"
 version = "0.25.6"
 description = "OpenTelemetry Vertex AI instrumentation"
 authors = [
@@ -16,7 +16,7 @@ authors = [
   "Tomer Friedman <tomer@traceloop.com>",
   "Swaroop <maddisaiswaroop@gmail.com>"
 ]
-repository = "https://github.com/traceloop/openllmetry/tree/main/packages/opentelemetry-instrumentation-vertexai"
+repository = "https://github.com/insightfinder/ifllmetry/tree/main/packages/opentelemetry-instrumentation-vertexai"
 license = "Apache-2.0"
 readme = "README.md"
 
@@ -28,7 +28,7 @@ python = ">=3.9,<4"
 opentelemetry-api = "^1.25.0"
 opentelemetry-instrumentation = "^0.46b0"
 opentelemetry-semantic-conventions = "^0.46b0"
-opentelemetry-semantic-conventions-ai = "0.3.6"
+opentelemetry-if-semantic-conventions-ai = "0.3.6"
 
 [tool.poetry.group.dev.dependencies]
 autopep8 = "^2.2.0"

@@ -71,10 +71,13 @@ jobs:
       - run: npm ci
       
       - name: Build Instrumentations
-        run: npx nx run-many -t build-release --projects=tag:instrumentation
+        run: npx nx run-many -t build-release --projects=tag:instrumentation,tag:conventions
       
-      - run: mkdir instrumentations-dist
-      - run: cp packages/opentelemetry-instrumentation-*/dist/* instrumentations-dist
+      - name: Create the instrumentations-dist directory
+        run: mkdir instrumentations-dist
+
+      - name: Copy all the necessary packages
+        run: cp packages/opentelemetry-instrumentation-*/dist/* packages/opentelemetry-semantic-*/dist/*  instrumentations-dist
 
       - name: Publish release distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

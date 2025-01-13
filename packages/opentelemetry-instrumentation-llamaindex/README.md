@@ -1,6 +1,6 @@
 # OpenTelemetry LlamaIndex Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-llamaindex/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-llamaindex/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-llamaindex.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing complete LLM applications built with [LlamaIndex](ht
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-llamaindex
+pip install opentelemetry-if-instrumentation-llamaindex
 ```
 
 ## Example usage

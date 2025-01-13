@@ -1,6 +1,6 @@
 # OpenTelemetry Google Generative AI Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-google-generativeai/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-google-generativeai/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-google-generativeai.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing Google Gemini prompts and completions sent with the 
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-google-generativeai
+pip install opentelemetry-if-instrumentation-google-generativeai
 ```
 
 ## Example usage
