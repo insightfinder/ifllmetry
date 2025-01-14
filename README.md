@@ -2,7 +2,7 @@
 Instead, import [iftracer-sdk](https://github.com/insightfinder/iftracer-sdk) directly. [iftracer-sdk](https://github.com/insightfinder/iftracer-sdk) will use the opentelemetry-* pkgs in this repository.
 
 * Why do we need this package: This package provides general tags generation. e.g.: .input or .output is generated from this package. Spans like openai.chat is generated from [packages/opentelemetry-instrumentation-openai](packages/opentelemetry-instrumentation-openai)
-* Why don't use the repository that includes the latest opentelemetry-* packages: That will cause dependency issues when opentelemetry-* packages get updated. We should manage opentelemetry-* packages and update it when we are ready.
+* Why don't we use the repository that includes the latest opentelemetry-* packages: That will cause dependency issues when opentelemetry-* packages get updated. We should manage opentelemetry-* packages and update it when we are ready.
 
 ## description
 Iftracer is a set of extensions built on top of [OpenTelemetry](https://opentelemetry.io/) that gives you complete observability over your LLM application. Because it uses OpenTelemetry under the hood, it can be connected to your existing observability solutions - Datadog, Honeycomb, and others.
@@ -17,7 +17,7 @@ If you already have OpenTelemetry instrumented, you can just add any of our inst
 Install the SDK into your project:
 
 ```python
-pip install iftracer-sdk  (TBA, for now we should use 'poetry add git https://github.com/insightfinder/iftracer-sdk'. Check [iftracer-sdk](https://github.com/insightfinder/iftracer-sdk) for latest installation instructions)
+pip install iftracer-sdk
 ```
 
 To start instrumenting your code, just add this line to your code:
