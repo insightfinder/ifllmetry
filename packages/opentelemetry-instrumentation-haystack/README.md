@@ -1,6 +1,6 @@
 # OpenTelemetry Haystack Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-haystack/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-haystack/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-haystack.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing complete LLM applications built with [Haystack](http
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-haystack
+pip install opentelemetry-if-instrumentation-haystack
 ```
 
 ## Example usage

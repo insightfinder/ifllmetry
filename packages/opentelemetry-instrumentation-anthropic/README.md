@@ -1,6 +1,6 @@
 # OpenTelemetry Anthropic Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-anthropic/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-anthropic/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-anthropic.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing Anthropic prompts and completions sent with the offi
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-anthropic
+pip install opentelemetry-if-instrumentation-anthropic
 ```
 
 ## Example usage

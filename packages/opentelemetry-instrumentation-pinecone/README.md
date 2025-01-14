@@ -1,6 +1,6 @@
 # OpenTelemetry Pinecone Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-pinecone/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-pinecone/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-pinecone.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing client-side calls to Pinecone vector DB sent with th
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-pinecone
+pip install opentelemetry-if-instrumentation-pinecone
 ```
 
 ## Example usage

@@ -1,6 +1,6 @@
 # OpenTelemetry Replicate Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-replicate/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-replicate/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-replicate.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing Replicate prompts and image generation sent with the
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-replicate
+pip install opentelemetry-if-instrumentation-replicate
 ```
 
 ## Example usage

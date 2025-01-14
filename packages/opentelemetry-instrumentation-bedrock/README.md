@@ -1,6 +1,6 @@
 # OpenTelemetry Bedrock Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-bedrock/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-bedrock/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-bedrock.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing any of AWS Bedrock's models prompts and completions 
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-bedrock
+pip install opentelemetry-if-instrumentation-bedrock
 ```
 
 ## Example usage

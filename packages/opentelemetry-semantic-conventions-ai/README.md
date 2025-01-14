@@ -1,6 +1,6 @@
 # OpenTelemetry Semantic Conventions extensions for gen-AI applications
 
-<a href="https://pypi.org/project/opentelemetry-semantic-conventions-ai/">
+<a href="https://pypi.org/project/opentelemetry-if-semantic-conventions-ai/">
     <img src="https://badge.fury.io/py/opentelemetry-semantic-conventions-ai.svg">
 </a>
 

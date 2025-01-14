@@ -1,6 +1,6 @@
 # OpenTelemetry OpenAI Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-openai/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-openai/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-openai.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing OpenAI prompts and completions sent with the officia
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-openai
+pip install opentelemetry-if-instrumentation-openai
 ```
 
 ## Example usage
