@@ -1,16 +1,15 @@
 import os
 import pytest
-from mistralai.client import MistralClient
-from mistralai.async_client import MistralAsyncClient
 from opentelemetry.semconv.ai import SpanAttributes
+from mistralai import Mistral
 
 
 @pytest.mark.vcr
 def test_ollama_embeddings(exporter):
-    client = MistralClient(api_key=os.environ["MISTRAL_API_KEY"])
-    client.embeddings(
+    client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
+    client.embeddings.create(
         model="mistral-embed",
-        input="Tell me a joke about OpenTelemetry",
+        inputs="Tell me a joke about OpenTelemetry",
     )
 
     spans = exporter.get_finished_spans()
@@ -29,10 +28,10 @@ def test_ollama_embeddings(exporter):
 @pytest.mark.vcr
 @pytest.mark.asyncio
 async def test_mistral_async_embeddings(exporter):
-    client = MistralAsyncClient(api_key=os.environ["MISTRAL_API_KEY"])
-    await client.embeddings(
+    client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
+    await client.embeddings.create_async(
         model="mistral-embed",
-        input=["Tell me a joke about OpenTelemetry", "Tell me a joke about Iftracer"],
+        inputs=["Tell me a joke about OpenTelemetry", "Tell me a joke about Iftracer"],
     )
 
     spans = exporter.get_finished_spans()

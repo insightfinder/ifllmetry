@@ -2,21 +2,25 @@ import os
 import pytest
 from mistralai.client import MistralClient
 from mistralai.async_client import MistralAsyncClient
-from mistralai.models.chat_completion import ChatMessage
 from opentelemetry.semconv.ai import SpanAttributes
+
+from mistralai import UserMessage
+from mistralai import Mistral
 
 
 @pytest.mark.vcr
 def test_mistralai_chat(exporter):
-    client = MistralClient(api_key=os.environ["MISTRAL_API_KEY"])
-    response = client.chat(
+    client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
+    response = client.chat.complete(
         model="mistral-tiny",
         messages=[
-            ChatMessage(role="user", content="Tell me a joke about OpenTelemetry"),
+            UserMessage(content="Tell me a joke about OpenTelemetry"),
         ],
+        stream = False
     )
 
     spans = exporter.get_finished_spans()
+    print("spans", spans)
     mistral_span = spans[0]
     assert mistral_span.name == "mistralai.chat"
     assert mistral_span.attributes.get(f"{SpanAttributes.LLM_SYSTEM}") == "MistralAI"
@@ -43,17 +47,17 @@ def test_mistralai_chat(exporter):
 
 @pytest.mark.vcr
 def test_mistralai_streaming_chat(exporter):
-    client = MistralClient(api_key=os.environ["MISTRAL_API_KEY"])
-    gen = client.chat_stream(
+    client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
+    gen = client.chat.stream(
         model="mistral-tiny",
         messages=[
-            ChatMessage(role="user", content="Tell me a joke about OpenTelemetry"),
+            UserMessage(role="user", content="Tell me a joke about OpenTelemetry"),
         ],
     )
 
     response = ""
     for res in gen:
-        response += res.choices[0].delta.content
+        response += res.data.choices[0].delta.content
 
     spans = exporter.get_finished_spans()
     mistral_span = spans[0]
@@ -80,11 +84,11 @@ def test_mistralai_streaming_chat(exporter):
 @pytest.mark.vcr
 @pytest.mark.asyncio
 async def test_mistralai_async_chat(exporter):
-    client = MistralAsyncClient(api_key=os.environ["MISTRAL_API_KEY"])
-    response = await client.chat(
+    client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
+    response = await client.chat.complete_async(
         model="mistral-tiny",
         messages=[
-            ChatMessage(role="user", content="Tell me a joke about OpenTelemetry"),
+            UserMessage(role="user", content="Tell me a joke about OpenTelemetry"),
         ],
     )
 
@@ -117,17 +121,17 @@ async def test_mistralai_async_chat(exporter):
 @pytest.mark.vcr
 @pytest.mark.asyncio
 async def test_mistralai_async_streaming_chat(exporter):
-    client = MistralAsyncClient(api_key=os.environ["MISTRAL_API_KEY"])
-    gen = await client.chat_stream(
+    client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
+    gen = await client.chat.stream_async(
         model="mistral-tiny",
         messages=[
-            ChatMessage(role="user", content="Tell me a joke about OpenTelemetry"),
+            UserMessage(role="user", content="Tell me a joke about OpenTelemetry"),
         ],
     )
 
     response = ""
     async for res in gen:
-        response += res.choices[0].delta.content
+        response += res.data.choices[0].delta.content
 
     spans = exporter.get_finished_spans()
     mistral_span = spans[0]
