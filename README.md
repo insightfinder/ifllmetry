@@ -57,14 +57,3 @@ OpenLLMetry can instrument everything that [OpenTelemetry already instruments](h
 - [ ] Weaviate
 - [ ] Pgvector
 
-
-## Guidance on testing the langchain + AI model
-Sometimes we need to update the support for AI models and do some testings. It's easy to test the standalone AI models but challenging to test the langchain + AI models.
-Let's use Mistralai as an example.
-Here are the example steps to test langchain + Mistralai:
-1. Install the GAI and update the astralai related dependencies in GAI pyproject.toml to the latest. Modify the iftracer-sdk and related dependencies to connect to your changes.
-2. Add mistralai in config/models.yaml. Create a new mistralai model similar t the LLMs/llama3.
-3. Replace llama3 in LLMService.py by mistralai model.
-4. Set value for IFTRACER_BASE_URL in .env file so that we can get jaeger log later. 
-5. Open localhost:8000/docs#/Chatbot with LLM/post_chat_chat_message_post. Trigger the API.
-6. Check if the jaeger log contains the LLM model related info. 
