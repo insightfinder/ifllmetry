@@ -25,34 +25,55 @@ from opentelemetry.semconv.ai import (
 )
 from opentelemetry.instrumentation.mistralai.version import __version__
 
-from mistralai.models.chat_completion import (
-    ChatMessage,
-    ChatCompletionResponse,
-    ChatCompletionResponseChoice,
-)
-from mistralai.models.common import UsageInfo
+
+from mistralai import Mistral, UserMessage, AssistantMessage
+from mistralai.models.chatcompletionresponse import ChatCompletionResponse
+from mistralai.models.chatcompletionchoice import ChatCompletionChoice
+from mistralai.models.usageinfo import UsageInfo
 
 logger = logging.getLogger(__name__)
 
-_instruments = ("mistralai >= 0.2.0, < 1",)
+_instruments = ("mistralai >= 1.0.0, < 2",)
 
 WRAPPED_METHODS = [
     {
-        "method": "chat",
+        "method": "complete",
         "span_name": "mistralai.chat",
         "streaming": False,
     },
     {
-        "method": "chat_stream",
+        "method": "stream",
         "span_name": "mistralai.chat",
         "streaming": True,
+    }
+]
+
+WRAPPED_METHODS_ASYNC = [
+    {
+        "method": "complete_async",
+        "span_name": "mistralai.chat",
+        "streaming": False,
     },
     {
-        "method": "embeddings",
+        "method": "stream_async",
+        "span_name": "mistralai.chat",
+        "streaming": True,
+    }
+]
+
+WRAPPED_METHODS_EMBED = [
+    {
+        "method": "create",
         "span_name": "mistralai.embeddings",
         "streaming": False,
     },
+    {
+        "method": "create_async",
+        "span_name": "mistralai.embeddings",
+        "streaming": False,
+    }
 ]
+
 
 
 def should_send_prompts():
@@ -92,17 +113,17 @@ def _set_input_attributes(span, llm_request_type, to_wrap, kwargs):
                     message.role,
                 )
         else:
-            input = kwargs.get("input")
+            inputs = kwargs.get("inputs")
 
-            if isinstance(input, str):
+            if isinstance(inputs, str):
                 _set_span_attribute(
                     span, f"{SpanAttributes.LLM_PROMPTS}.0.role", "user"
                 )
                 _set_span_attribute(
-                    span, f"{SpanAttributes.LLM_PROMPTS}.0.content", input
+                    span, f"{SpanAttributes.LLM_PROMPTS}.0.content", inputs
                 )
             else:
-                for index, prompt in enumerate(input):
+                for index, prompt in enumerate(inputs):
                     _set_span_attribute(
                         span,
                         f"{SpanAttributes.LLM_PROMPTS}.{index}.role",
@@ -182,17 +203,17 @@ def _accumulate_streaming_response(span, llm_request_type, response):
     for res in response:
         yield res
 
-        if res.model:
-            accumulated_response.model = res.model
-        if res.usage:
-            accumulated_response.usage = res.usage
+        if res.data.model:
+            accumulated_response.model = res.data.model
+        if res.data.usage:
+            accumulated_response.usage = res.data.usage
 
-        for idx, choice in enumerate(res.choices):
+        for idx, choice in enumerate(res.data.choices):
             if len(accumulated_response.choices) <= idx:
                 accumulated_response.choices.append(
-                    ChatCompletionResponseChoice(
+                    ChatCompletionChoice(
                         index=idx,
-                        message=ChatMessage(role="assistant", content=""),
+                        message=AssistantMessage(role="assistant", content=""),
                         finish_reason=None,
                     )
                 )
@@ -215,20 +236,22 @@ async def _aaccumulate_streaming_response(span, llm_request_type, response):
         usage=UsageInfo(prompt_tokens=0, total_tokens=0, completion_tokens=0),
     )
 
-    async for res in response:
+    async_response = await response
+
+    async for res in async_response:
         yield res
 
-        if res.model:
-            accumulated_response.model = res.model
-        if res.usage:
-            accumulated_response.usage = res.usage
+        if res.data.model:
+            accumulated_response.model = res.data.model
+        if res.data.usage:
+            accumulated_response.usage = res.data.usage
 
-        for idx, choice in enumerate(res.choices):
+        for idx, choice in enumerate(res.data.choices):
             if len(accumulated_response.choices) <= idx:
                 accumulated_response.choices.append(
-                    ChatCompletionResponseChoice(
+                    ChatCompletionChoice(
                         index=idx,
-                        message=ChatMessage(role="assistant", content=""),
+                        message=AssistantMessage(role="assistant", content=""),
                         finish_reason=None,
                     )
                 )
@@ -254,9 +277,9 @@ def _with_tracer_wrapper(func):
 
 
 def _llm_request_type_by_method(method_name):
-    if method_name == "chat" or method_name == "chat_stream":
+    if method_name == "complete" or method_name == "stream" or method_name == "complete_async" or method_name == "stream_async":
         return LLMRequestTypeValues.CHAT
-    elif method_name == "embeddings":
+    elif method_name == "create" or method_name == "create_async":
         return LLMRequestTypeValues.EMBEDDING
     else:
         return LLMRequestTypeValues.UNKNOWN
@@ -352,24 +375,47 @@ class MistralAiInstrumentor(BaseInstrumentor):
         for wrapped_method in WRAPPED_METHODS:
             wrap_method = wrapped_method.get("method")
             wrap_function_wrapper(
-                "mistralai.client",
-                f"MistralClient.{wrap_method}",
+                "mistralai",
+                f"chat.Chat.{wrap_method}",
                 _wrap(tracer, wrapped_method),
             )
+
+        for wrapped_method in WRAPPED_METHODS_ASYNC:
+            wrap_method = wrapped_method.get("method")
             wrap_function_wrapper(
-                "mistralai.async_client",
-                f"MistralAsyncClient.{wrap_method}",
+                "mistralai",
+                f"chat.Chat.{wrap_method}",
                 _awrap(tracer, wrapped_method),
+            )
+        
+
+        for wrapped_method in WRAPPED_METHODS_EMBED:
+            wrap_method = wrapped_method.get("method")
+            wrap_function_wrapper(
+                "mistralai",
+                f"embeddings.Embeddings.{wrap_method}",
+                _wrap(tracer, wrapped_method),
             )
 
     def _uninstrument(self, **kwargs):
         for wrapped_method in WRAPPED_METHODS:
             wrap_object = wrapped_method.get("object")
             unwrap(
-                f"mistralai.client.MistralClient.{wrap_object}",
+                f"mistralai.chat.Chat.{wrap_object}",
                 wrapped_method.get("method"),
             )
+
+        
+        for wrapped_method in WRAPPED_METHODS_ASYNC:
+            wrap_object = wrapped_method.get("object")
             unwrap(
-                f"mistralai.async_client.AsyncMistralClient.{wrap_object}",
+                f"mistralai.chat.Chat.{wrap_object}",
+                wrapped_method.get("method"),
+            )
+
+        for wrapped_method in WRAPPED_METHODS_EMBED:
+            wrap_object = wrapped_method.get("object")
+            unwrap(
+                f"mistralai.embeddings.Embeddings.{wrap_object}",
                 wrapped_method.get("method"),
             )
