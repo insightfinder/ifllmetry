@@ -1,8 +1,8 @@
 import time
 from openai import OpenAI
-from traceloop.sdk import Traceloop
+from iftracer.sdk import Iftracer
 
-Traceloop.init()
+Iftracer.init()
 
 client = OpenAI()
 

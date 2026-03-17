@@ -1,6 +1,6 @@
 # OpenTelemetry Replicate Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-replicate/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-replicate/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-replicate.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing Replicate prompts and image generation sent with the
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-replicate
+pip install opentelemetry-if-instrumentation-replicate
 ```
 
 ## Example usage
@@ -26,8 +26,8 @@ ReplicateInstrumentor().instrument()
 
 However, you may want to disable this logging for privacy reasons, as they may contain highly sensitive data from your users. You may also simply want to reduce the size of your traces.
 
-To disable logging, set the `TRACELOOP_TRACE_CONTENT` environment variable to `false`.
+To disable logging, set the `IFTRACER_TRACE_CONTENT` environment variable to `false`.
 
 ```bash
-TRACELOOP_TRACE_CONTENT=false
+IFTRACER_TRACE_CONTENT=false
 ```

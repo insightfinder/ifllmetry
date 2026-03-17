@@ -1,15 +1,15 @@
-from importlib.metadata import PackageNotFoundError
-from importlib.metadata import version as package_version
+from importlib.metadata import version as package_version, PackageNotFoundError
 
+from wrapt import wrap_function_wrapper
 from opentelemetry.context import attach, set_value
+
 from opentelemetry.instrumentation.llamaindex.utils import (
     _with_tracer_wrapper,
     process_request,
     process_response,
     start_as_current_span_async,
 )
-from opentelemetry.semconv_ai import SpanAttributes, TraceloopSpanKindValues
-from wrapt import wrap_function_wrapper
+from opentelemetry.semconv.ai import SpanAttributes, TraceloopSpanKindValues
 
 V9_MODULE_NAME = "llama_index.query_engine.retriever_query_engine"
 V10_MODULE_NAME = "llama_index.core.query_engine.retriever_query_engine"
@@ -51,10 +51,10 @@ def query_wrapper(tracer, wrapped, instance, args, kwargs):
 
     with tracer.start_as_current_span(f"{WORKFLOW_NAME}.workflow") as span:
         span.set_attribute(
-            SpanAttributes.TRACELOOP_SPAN_KIND,
+            SpanAttributes.IFTRACER_SPAN_KIND,
             TraceloopSpanKindValues.WORKFLOW.value,
         )
-        span.set_attribute(SpanAttributes.TRACELOOP_ENTITY_NAME, WORKFLOW_NAME)
+        span.set_attribute(SpanAttributes.IFTRACER_ENTITY_NAME, WORKFLOW_NAME)
 
         process_request(span, args, kwargs)
         res = wrapped(*args, **kwargs)
@@ -70,10 +70,10 @@ async def aquery_wrapper(tracer, wrapped, instance, args, kwargs):
         tracer=tracer, name=f"{WORKFLOW_NAME}.workflow"
     ) as span:
         span.set_attribute(
-            SpanAttributes.TRACELOOP_SPAN_KIND,
+            SpanAttributes.IFTRACER_SPAN_KIND,
             TraceloopSpanKindValues.WORKFLOW.value,
         )
-        span.set_attribute(SpanAttributes.TRACELOOP_ENTITY_NAME, WORKFLOW_NAME)
+        span.set_attribute(SpanAttributes.IFTRACER_ENTITY_NAME, WORKFLOW_NAME)
 
         process_request(span, args, kwargs)
         res = await wrapped(*args, **kwargs)

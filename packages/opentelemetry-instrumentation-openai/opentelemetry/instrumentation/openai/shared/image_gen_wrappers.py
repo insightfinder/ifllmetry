@@ -12,7 +12,7 @@ from opentelemetry.instrumentation.openai.utils import (
 )
 from opentelemetry.instrumentation.utils import _SUPPRESS_INSTRUMENTATION_KEY
 from opentelemetry.metrics import Counter, Histogram
-from opentelemetry.semconv_ai import SUPPRESS_LANGUAGE_MODEL_INSTRUMENTATION_KEY
+from opentelemetry.semconv.ai import SUPPRESS_LANGUAGE_MODEL_INSTRUMENTATION_KEY
 
 
 @_with_image_gen_metric_wrapper
@@ -47,7 +47,7 @@ def image_gen_metrics_wrapper(
         if exception_counter:
             exception_counter.add(1, attributes=attributes)
 
-        raise
+        raise e
 
     if is_openai_v1():
         response_dict = model_as_dict(response)

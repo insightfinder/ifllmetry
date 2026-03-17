@@ -2,7 +2,6 @@
 
 import logging
 import time
-import importlib.util
 import pinecone
 from typing import Collection
 from wrapt import wrap_function_wrapper
@@ -29,11 +28,12 @@ from opentelemetry.instrumentation.pinecone.query_handlers import (
     set_query_response,
 )
 from opentelemetry.semconv.trace import SpanAttributes
-from opentelemetry.semconv_ai import Meters, SpanAttributes as AISpanAttributes
+from opentelemetry.semconv.ai import Meters, SpanAttributes as AISpanAttributes
 
 logger = logging.getLogger(__name__)
 
-_instruments = ("pinecone >= 5.1.0, <9",)
+_instruments = ("pinecone-client >= 2.2.2, <5",)
+
 
 WRAPPED_METHODS = [
     {
@@ -220,102 +220,21 @@ class PineconeInstrumentor(BaseInstrumentor):
         for wrapped_method in WRAPPED_METHODS:
             wrap_object = wrapped_method.get("object")
             wrap_method = wrapped_method.get("method")
-
-            if wrap_object == "Index":
-                try:
-                    if importlib.util.find_spec("pinecone.db_data.index") is not None:
-                        try:
-                            wrap_function_wrapper(
-                                "pinecone.db_data.index",
-                                f"{wrap_object}.{wrap_method}",
-                                _wrap(
-                                    tracer,
-                                    query_duration_metric,
-                                    read_units_metric,
-                                    write_units_metric,
-                                    scores_metric,
-                                    wrapped_method,
-                                ),
-                            )
-                            continue
-                        except (ImportError, AttributeError):
-                            pass
-                except (ModuleNotFoundError, ImportError):
-                    pass
-
-                if getattr(pinecone, wrap_object, None):
-                    wrap_function_wrapper(
-                        "pinecone",
-                        f"{wrap_object}.{wrap_method}",
-                        _wrap(
-                            tracer,
-                            query_duration_metric,
-                            read_units_metric,
-                            write_units_metric,
-                            scores_metric,
-                            wrapped_method,
-                        ),
-                    )
-            elif wrap_object == "GRPCIndex":
-                try:
-                    if importlib.util.find_spec("pinecone.db_data.index") is not None:
-                        try:
-                            wrap_function_wrapper(
-                                "pinecone.db_data.index",
-                                f"{wrap_object}.{wrap_method}",
-                                _wrap(
-                                    tracer,
-                                    query_duration_metric,
-                                    read_units_metric,
-                                    write_units_metric,
-                                    scores_metric,
-                                    wrapped_method,
-                                ),
-                            )
-                            continue
-                        except (ImportError, AttributeError):
-                            pass
-                except (ModuleNotFoundError, ImportError):
-                    pass
-
-                if getattr(pinecone, wrap_object, None):
-                    wrap_function_wrapper(
-                        "pinecone",
-                        f"{wrap_object}.{wrap_method}",
-                        _wrap(
-                            tracer,
-                            query_duration_metric,
-                            read_units_metric,
-                            write_units_metric,
-                            scores_metric,
-                            wrapped_method,
-                        ),
-                    )
+            if getattr(pinecone, wrap_object, None):
+                wrap_function_wrapper(
+                    "pinecone",
+                    f"{wrap_object}.{wrap_method}",
+                    _wrap(
+                        tracer,
+                        query_duration_metric,
+                        read_units_metric,
+                        write_units_metric,
+                        scores_metric,
+                        wrapped_method,
+                    ),
+                )
 
     def _uninstrument(self, **kwargs):
         for wrapped_method in WRAPPED_METHODS:
             wrap_object = wrapped_method.get("object")
-            wrap_method_name = wrapped_method.get("method")
-
-            if wrap_object == "Index":
-                try:
-                    unwrap("pinecone.db_data.index.Index", wrap_method_name)
-                except Exception as e:
-                    logger.debug(
-                        f"Failed to unwrap pinecone.db_data.index.Index.{wrap_method_name}: {e}"
-                    )
-
-            if wrap_object == "GRPCIndex":
-                try:
-                    unwrap("pinecone.db_data.index.GRPCIndex", wrap_method_name)
-                except Exception as e:
-                    logger.debug(
-                        f"Failed to unwrap pinecone.db_data.index.GRPCIndex.{wrap_method_name}: {e}"
-                    )
-
-            try:
-                unwrap(f"pinecone.{wrap_object}", wrap_method_name)
-            except Exception as e:
-                logger.debug(
-                    f"Failed to unwrap pinecone.{wrap_object}.{wrap_method_name}: {e}"
-                )
+            unwrap(f"pinecone.{wrap_object}", wrapped_method.get("method"))

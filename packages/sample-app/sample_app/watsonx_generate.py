@@ -1,14 +1,14 @@
 import os
 from ibm_watson_machine_learning.foundation_models import Model
 
-from traceloop.sdk import Traceloop
+from iftracer.sdk import Iftracer
 
 from dotenv import load_dotenv
 load_dotenv()
 
 os.environ['OTEL_EXPORTER_OTLP_INSECURE'] = 'True'
 
-Traceloop.init(app_name="watsonx_example")
+Iftracer.init(app_name="watsonx_example")
 
 
 def get_credentials(api_key):

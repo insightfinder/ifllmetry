@@ -78,7 +78,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '62'
       openai-version:
@@ -154,7 +154,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '47'
       openai-version:
@@ -233,7 +233,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '58'
       openai-version:
@@ -319,7 +319,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '361'
       openai-version:
@@ -403,7 +403,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '60'
       openai-version:
@@ -487,7 +487,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '55'
       openai-version:
@@ -571,7 +571,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '75'
       openai-version:
@@ -657,7 +657,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '74'
       openai-version:
@@ -753,7 +753,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '1182'
       openai-version:
@@ -847,7 +847,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '638'
       openai-version:
@@ -946,7 +946,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '179'
       openai-version:
@@ -1030,7 +1030,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '41'
       openai-version:
@@ -1114,7 +1114,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '44'
       openai-version:
@@ -1198,7 +1198,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '60'
       openai-version:
@@ -1282,7 +1282,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '44'
       openai-version:
@@ -1366,7 +1366,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '73'
       openai-version:
@@ -1450,7 +1450,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '78'
       openai-version:
@@ -1530,7 +1530,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '33'
       openai-version:
@@ -1603,7 +1603,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '36'
       openai-version:

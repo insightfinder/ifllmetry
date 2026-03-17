@@ -2,41 +2,32 @@
 
 import logging
 import os
-import time
 import types
-from typing import Collection, Optional, Union
+import time
+from typing import Collection, Optional
+from opentelemetry.instrumentation.watsonx.config import Config
+from opentelemetry.instrumentation.watsonx.utils import dont_throw
+from wrapt import wrap_function_wrapper
 
 from opentelemetry import context as context_api
-from opentelemetry._logs import Logger, get_logger
+from opentelemetry.trace import get_tracer, SpanKind
+from opentelemetry.trace.status import Status, StatusCode
+from opentelemetry.metrics import get_meter
+from opentelemetry.metrics import Counter, Histogram
+
 from opentelemetry.instrumentation.instrumentor import BaseInstrumentor
 from opentelemetry.instrumentation.utils import (
     _SUPPRESS_INSTRUMENTATION_KEY,
     unwrap,
 )
-from opentelemetry.instrumentation.watsonx.config import Config
-from opentelemetry.instrumentation.watsonx.event_emitter import (
-    emit_event,
-)
-from opentelemetry.instrumentation.watsonx.event_models import ChoiceEvent, MessageEvent
-from opentelemetry.instrumentation.watsonx.utils import (
-    dont_throw,
-    should_emit_events,
-    should_send_prompts,
-)
-from opentelemetry.instrumentation.watsonx.version import __version__
-from opentelemetry.metrics import Counter, Histogram, get_meter
-from opentelemetry.semconv._incubating.attributes import (
-    gen_ai_attributes as GenAIAttributes,
-)
-from opentelemetry.semconv_ai import (
+
+from opentelemetry.semconv.ai import (
     SUPPRESS_LANGUAGE_MODEL_INSTRUMENTATION_KEY,
-    LLMRequestTypeValues,
     Meters,
     SpanAttributes,
+    LLMRequestTypeValues,
 )
-from opentelemetry.trace import SpanKind, get_tracer
-from opentelemetry.trace.status import Status, StatusCode
-from wrapt import wrap_function_wrapper
+from opentelemetry.instrumentation.watsonx.version import __version__
 
 logger = logging.getLogger(__name__)
 
@@ -110,8 +101,6 @@ def _set_span_attribute(span, name, value):
 
 
 def _set_api_attributes(span):
-    if not span.is_recording():
-        return
     _set_span_attribute(
         span,
         WatsonxSpanAttributes.WATSONX_API_BASE,
@@ -120,46 +109,37 @@ def _set_api_attributes(span):
     _set_span_attribute(span, WatsonxSpanAttributes.WATSONX_API_TYPE, "watsonx.ai")
     _set_span_attribute(span, WatsonxSpanAttributes.WATSONX_API_VERSION, "1.0")
 
+    return
+
+
+def should_send_prompts():
+    return (
+        os.getenv("IFTRACER_TRACE_CONTENT") or "true"
+    ).lower() == "true" or context_api.get_value("override_enable_content_tracing")
+
 
 def is_metrics_enabled() -> bool:
-    return (os.getenv("TRACELOOP_METRICS_ENABLED") or "true").lower() == "true"
+    return (os.getenv("IFTRACER_METRICS_ENABLED") or "true").lower() == "true"
 
 
-def _set_input_attributes(span, args=None, kwargs=None):
-    if not span.is_recording():
-        return
-
-    args = args or ()
-    kwargs = kwargs or {}
-    prompt = kwargs.get("prompt")
-    if not prompt and args:
-        first_arg = args[0]
-        if isinstance(first_arg, (str, list)):
-            prompt = first_arg
-
-    if not prompt:
-        return
-
-    if isinstance(prompt, list):
-        for index, input_text in enumerate(prompt):
+def _set_input_attributes(span, instance, kwargs):
+    if should_send_prompts() and kwargs is not None and len(kwargs) > 0:
+        prompt = kwargs.get("prompt")
+        if isinstance(prompt, list):
+            for index, input in enumerate(prompt):
+                _set_span_attribute(
+                    span,
+                    f"{SpanAttributes.LLM_PROMPTS}.{index}.user",
+                    input,
+                )
+        else:
             _set_span_attribute(
                 span,
-                f"{SpanAttributes.GEN_AI_PROMPT}.{index}.user",
-                str(input_text).strip(),
+                f"{SpanAttributes.LLM_PROMPTS}.0.user",
+                prompt,
             )
-    else:
-        _set_span_attribute(
-            span,
-            f"{SpanAttributes.LLM_PROMPTS}.0.user",
-            str(prompt).strip(),
-        )
 
-
-def set_model_input_attributes(span, instance):
-    if not span.is_recording():
-        return
-
-    _set_span_attribute(span, GenAIAttributes.GEN_AI_REQUEST_MODEL, instance.model_id)
+    _set_span_attribute(span, SpanAttributes.LLM_REQUEST_MODEL, instance.model_id)
     # Set other attributes
     modelParameters = instance.params
     if modelParameters is not None:
@@ -184,7 +164,7 @@ def set_model_input_attributes(span, instance):
             modelParameters.get("min_new_tokens", None),
         )
         _set_span_attribute(
-            span, GenAIAttributes.GEN_AI_REQUEST_TOP_K, modelParameters.get("top_k", None)
+            span, SpanAttributes.LLM_TOP_K, modelParameters.get("top_k", None)
         )
         _set_span_attribute(
             span,
@@ -193,38 +173,28 @@ def set_model_input_attributes(span, instance):
         )
         _set_span_attribute(
             span,
-            GenAIAttributes.GEN_AI_REQUEST_TEMPERATURE,
+            SpanAttributes.LLM_REQUEST_TEMPERATURE,
             modelParameters.get("temperature", None),
         )
         _set_span_attribute(
-            span, GenAIAttributes.GEN_AI_REQUEST_TOP_P, modelParameters.get("top_p", None)
+            span, SpanAttributes.LLM_REQUEST_TOP_P, modelParameters.get("top_p", None)
         )
+
+    return
 
 
 def _set_stream_response_attributes(span, stream_response):
-    if not span.is_recording() or not should_send_prompts():
-        return
     _set_span_attribute(
-        span,
-        f"{GenAIAttributes.GEN_AI_COMPLETION}.0.content",
-        stream_response.get("generated_text"),
-    )
-
-
-def _set_model_stream_response_attributes(span, stream_response):
-    if not span.is_recording():
-        return
-    _set_span_attribute(
-        span, GenAIAttributes.GEN_AI_RESPONSE_MODEL, stream_response.get("model_id")
+        span, SpanAttributes.LLM_RESPONSE_MODEL, stream_response.get("model_id")
     )
     _set_span_attribute(
         span,
-        GenAIAttributes.GEN_AI_USAGE_INPUT_TOKENS,
+        SpanAttributes.LLM_USAGE_PROMPT_TOKENS,
         stream_response.get("input_token_count"),
     )
     _set_span_attribute(
         span,
-        GenAIAttributes.GEN_AI_USAGE_OUTPUT_TOKENS,
+        SpanAttributes.LLM_USAGE_COMPLETION_TOKENS,
         stream_response.get("generated_token_count"),
     )
     total_token = stream_response.get("input_token_count") + stream_response.get(
@@ -235,6 +205,11 @@ def _set_model_stream_response_attributes(span, stream_response):
         SpanAttributes.LLM_USAGE_TOTAL_TOKENS,
         total_token,
     )
+    _set_span_attribute(
+        span,
+        f"{SpanAttributes.LLM_COMPLETIONS}.0.content",
+        stream_response.get("generated_text"),
+    )
 
 
 def _set_completion_content_attributes(
@@ -244,17 +219,16 @@ def _set_completion_content_attributes(
         return None
 
     if results := response.get("results"):
-        if should_send_prompts():
-            _set_span_attribute(
-                span,
-                f"{GenAIAttributes.GEN_AI_COMPLETION}.{index}.content",
-                results[0]["generated_text"],
-            )
+        _set_span_attribute(
+            span,
+            f"{SpanAttributes.LLM_COMPLETIONS}.{index}.content",
+            results[0]["generated_text"],
+        )
         model_id = response.get("model_id")
 
         if response_counter:
             attributes_with_reason = {
-                GenAIAttributes.GEN_AI_RESPONSE_MODEL: model_id,
+                SpanAttributes.LLM_RESPONSE_MODEL: model_id,
                 SpanAttributes.LLM_RESPONSE_STOP_REASON: results[0]["stop_reason"],
             }
             response_counter.add(1, attributes=attributes_with_reason)
@@ -283,7 +257,7 @@ def _token_usage_count(responses):
 def _set_response_attributes(
     span, responses, token_histogram, response_counter, duration_histogram, duration
 ):
-    if not isinstance(responses, (list, dict)) or not span.is_recording():
+    if not isinstance(responses, (list, dict)):
         return
 
     if isinstance(responses, list):
@@ -301,44 +275,18 @@ def _set_response_attributes(
 
     if model_id is None:
         return
-    _set_span_attribute(span, GenAIAttributes.GEN_AI_RESPONSE_MODEL, model_id)
-
-    shared_attributes = _metric_shared_attributes(response_model=model_id)
-
-    prompt_token, completion_token = _token_usage_count(responses)
-
-    if token_histogram:
-        attributes_with_token_type = {
-            **shared_attributes,
-            GenAIAttributes.GEN_AI_TOKEN_TYPE: "output",
-        }
-        token_histogram.record(completion_token, attributes=attributes_with_token_type)
-        attributes_with_token_type = {
-            **shared_attributes,
-            GenAIAttributes.GEN_AI_TOKEN_TYPE: "input",
-        }
-        token_histogram.record(prompt_token, attributes=attributes_with_token_type)
-
-    if duration and isinstance(duration, (float, int)) and duration_histogram:
-        duration_histogram.record(duration, attributes=shared_attributes)
-
-
-def set_model_response_attributes(
-    span, responses, token_histogram, duration_histogram, duration
-):
-    if not span.is_recording():
-        return
+    _set_span_attribute(span, SpanAttributes.LLM_RESPONSE_MODEL, model_id)
 
     prompt_token, completion_token = _token_usage_count(responses)
     if (prompt_token + completion_token) != 0:
         _set_span_attribute(
             span,
-            GenAIAttributes.GEN_AI_USAGE_OUTPUT_TOKENS,
+            SpanAttributes.LLM_USAGE_COMPLETION_TOKENS,
             completion_token,
         )
         _set_span_attribute(
             span,
-            GenAIAttributes.GEN_AI_USAGE_INPUT_TOKENS,
+            SpanAttributes.LLM_USAGE_PROMPT_TOKENS,
             prompt_token,
         )
         _set_span_attribute(
@@ -347,32 +295,28 @@ def set_model_response_attributes(
             prompt_token + completion_token,
         )
 
+        shared_attributes = _metric_shared_attributes(response_model=model_id)
 
-def _emit_input_events(args, kwargs, event_logger):
-    prompt = kwargs.get("prompt") or args[0]
-
-    if isinstance(prompt, list):
-        for message in prompt:
-            emit_event(MessageEvent(content=message, role="user"), event_logger)
-
-    elif isinstance(prompt, str):
-        emit_event(MessageEvent(content=prompt, role="user"), event_logger)
-
-
-def _emit_response_events(response: dict):
-    for i, message in enumerate(response.get("results", [])):
-        emit_event(
-            ChoiceEvent(
-                index=i,
-                message={"content": message.get("generated_text"), "role": "assistant"},
-                finish_reason=message.get("stop_reason", "unknown"),
+        if token_histogram:
+            attributes_with_token_type = {
+                **shared_attributes,
+                SpanAttributes.LLM_TOKEN_TYPE: "output",
+            }
+            token_histogram.record(
+                completion_token, attributes=attributes_with_token_type
             )
-        )
+            attributes_with_token_type = {
+                **shared_attributes,
+                SpanAttributes.LLM_TOKEN_TYPE: "input",
+            }
+            token_histogram.record(prompt_token, attributes=attributes_with_token_type)
+
+    if duration and isinstance(duration, (float, int)) and duration_histogram:
+        duration_histogram.record(duration, attributes=shared_attributes)
 
 
 def _build_and_set_stream_response(
     span,
-    event_logger,
     response,
     raw_flag,
     token_histogram,
@@ -381,8 +325,6 @@ def _build_and_set_stream_response(
     start_time,
 ):
     stream_generated_text = ""
-    stream_model_id = ""
-    stream_stop_reason = ""
     stream_generated_token_count = 0
     stream_input_token_count = 0
     for item in response:
@@ -406,9 +348,7 @@ def _build_and_set_stream_response(
         "generated_token_count": stream_generated_token_count,
         "input_token_count": stream_input_token_count,
     }
-    _handle_stream_response(
-        span, event_logger, stream_response, stream_generated_text, stream_stop_reason
-    )
+    _set_stream_response_attributes(span, stream_response)
     # response counter
     if response_counter:
         attributes_with_reason = {
@@ -421,14 +361,14 @@ def _build_and_set_stream_response(
     if token_histogram:
         attributes_with_token_type = {
             **shared_attributes,
-            GenAIAttributes.GEN_AI_TOKEN_TYPE: "output",
+            SpanAttributes.LLM_TOKEN_TYPE: "output",
         }
         token_histogram.record(
             stream_generated_token_count, attributes=attributes_with_token_type
         )
         attributes_with_token_type = {
             **shared_attributes,
-            GenAIAttributes.GEN_AI_TOKEN_TYPE: "input",
+            SpanAttributes.LLM_TOKEN_TYPE: "input",
         }
         token_histogram.record(
             stream_input_token_count, attributes=attributes_with_token_type
@@ -448,8 +388,8 @@ def _build_and_set_stream_response(
 
 def _metric_shared_attributes(response_model: str, is_streaming: bool = False):
     return {
-        GenAIAttributes.GEN_AI_RESPONSE_MODEL: response_model,
-        GenAIAttributes.GEN_AI_SYSTEM: "watsonx",
+        SpanAttributes.LLM_RESPONSE_MODEL: response_model,
+        SpanAttributes.LLM_SYSTEM: "watsonx",
         "stream": is_streaming,
     }
 
@@ -464,7 +404,6 @@ def _with_tracer_wrapper(func):
         response_counter,
         duration_histogram,
         exception_counter,
-        event_logger,
     ):
         def wrapper(wrapped, instance, args, kwargs):
             return func(
@@ -474,7 +413,6 @@ def _with_tracer_wrapper(func):
                 response_counter,
                 duration_histogram,
                 exception_counter,
-                event_logger,
                 wrapped,
                 instance,
                 args,
@@ -486,67 +424,6 @@ def _with_tracer_wrapper(func):
     return _with_tracer
 
 
-@dont_throw
-def _handle_input(span, event_logger, name, instance, response_counter, args, kwargs):
-    _set_api_attributes(span)
-
-    if "generate" in name:
-        set_model_input_attributes(span, instance)
-        if should_send_prompts():
-            _set_input_attributes(span, args=args, kwargs=kwargs)
-
-    if should_emit_events() and event_logger:
-        _emit_input_events(args, kwargs, event_logger)
-
-
-@dont_throw
-def _handle_response(
-    span,
-    event_logger,
-    responses,
-    response_counter,
-    token_histogram,
-    duration_histogram,
-    duration,
-):
-    set_model_response_attributes(
-        span, responses, token_histogram, duration_histogram, duration
-    )
-
-    if should_emit_events() and event_logger:
-        _emit_response_events(responses, event_logger)
-    else:
-        _set_response_attributes(
-            span,
-            responses,
-            token_histogram,
-            response_counter,
-            duration_histogram,
-            duration,
-        )
-
-
-@dont_throw
-def _handle_stream_response(
-    span, event_logger, stream_response, stream_generated_text, stream_stop_reason
-):
-    _set_model_stream_response_attributes(span, stream_response)
-
-    if should_emit_events() and event_logger:
-        _emit_response_events(
-            {
-                "results": [
-                    {
-                        "stop_reason": stream_stop_reason,
-                        "generated_text": stream_generated_text,
-                    }
-                ]
-            },
-        )
-    else:
-        _set_stream_response_attributes(span, stream_response)
-
-
 @_with_tracer_wrapper
 def _wrap(
     tracer,
@@ -555,7 +432,6 @@ def _wrap(
     response_counter: Counter,
     duration_histogram: Histogram,
     exception_counter: Counter,
-    event_logger: Union[Logger, None],
     wrapped,
     instance,
     args,
@@ -573,14 +449,14 @@ def _wrap(
         name,
         kind=SpanKind.CLIENT,
         attributes={
-            GenAIAttributes.GEN_AI_SYSTEM: "Watsonx",
+            SpanAttributes.LLM_SYSTEM: "Watsonx",
             SpanAttributes.LLM_REQUEST_TYPE: LLMRequestTypeValues.COMPLETION.value,
         },
     )
 
-    _handle_input(span, event_logger, name, instance, args, kwargs)
-
+    _set_api_attributes(span)
     if "generate" in name:
+        _set_input_attributes(span, instance, kwargs)
         if to_wrap.get("method") == "generate_text_stream":
             if (raw_flag := kwargs.get("raw_response", None)) is None:
                 kwargs = {**kwargs, "raw_response": True}
@@ -610,7 +486,6 @@ def _wrap(
         if isinstance(response, types.GeneratorType):
             return _build_and_set_stream_response(
                 span,
-                event_logger,
                 response,
                 raw_flag,
                 token_histogram,
@@ -620,15 +495,15 @@ def _wrap(
             )
         else:
             duration = end_time - start_time
-            _handle_response(
+            _set_response_attributes(
                 span,
-                event_logger,
                 response,
-                response_counter,
                 token_histogram,
+                response_counter,
                 duration_histogram,
                 duration,
             )
+
     span.end()
     return response
 
@@ -642,10 +517,9 @@ class WatsonxSpanAttributes:
 class WatsonxInstrumentor(BaseInstrumentor):
     """An instrumentor for Watsonx's client library."""
 
-    def __init__(self, exception_logger=None, use_legacy_attributes: bool = True):
+    def __init__(self, exception_logger=None):
         super().__init__()
         Config.exception_logger = exception_logger
-        Config.use_legacy_attributes = use_legacy_attributes
 
     def instrumentation_dependencies(self) -> Collection[str]:
         return _instruments
@@ -694,14 +568,6 @@ class WatsonxInstrumentor(BaseInstrumentor):
                 None,
             )
 
-        event_logger = None
-
-        if not Config.use_legacy_attributes:
-            logger_provider = kwargs.get("logger_provider")
-            event_logger = get_logger(
-                __name__, __version__, logger_provider=logger_provider
-            )
-
         for wrapped_methods in WATSON_MODULES:
             for wrapped_method in wrapped_methods:
                 wrap_module = wrapped_method.get("module")
@@ -717,7 +583,6 @@ class WatsonxInstrumentor(BaseInstrumentor):
                         response_counter,
                         duration_histogram,
                         exception_counter,
-                        event_logger,
                     ),
                 )
 

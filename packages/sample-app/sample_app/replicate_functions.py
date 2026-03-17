@@ -1,9 +1,9 @@
 import replicate
 
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import task, workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import task, workflow
 
-Traceloop.init(app_name="image_generation_service")
+Iftracer.init(app_name="image_generation_service")
 
 
 @task(name="image_generation")

@@ -7,11 +7,11 @@ from chromadb.utils.embedding_functions import (
 )
 from opentelemetry.sdk.trace.export import ConsoleSpanExporter
 import pandas as pd
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import workflow
 
 
-Traceloop.init(
+Iftracer.init(
     app_name="chroma_sentence_transformer_app",
     disable_batch=True,
     exporter=ConsoleSpanExporter(),

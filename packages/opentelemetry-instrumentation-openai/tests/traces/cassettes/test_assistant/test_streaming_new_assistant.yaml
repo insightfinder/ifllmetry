@@ -70,7 +70,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '94'
       openai-version:
@@ -146,7 +146,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '26'
       openai-version:
@@ -226,7 +226,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '113'
       openai-version:
@@ -302,7 +302,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '94'
       openai-version:
@@ -1696,7 +1696,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '356'
       openai-version:

@@ -1,17 +1,7 @@
 import logging
-import os
 import traceback
 
-from opentelemetry import context as context_api
 from opentelemetry.instrumentation.vertexai.config import Config
-
-TRACELOOP_TRACE_CONTENT = "TRACELOOP_TRACE_CONTENT"
-
-
-def should_send_prompts():
-    return (
-        os.getenv(TRACELOOP_TRACE_CONTENT) or "true"
-    ).lower() == "true" or context_api.get_value("override_enable_content_tracing")
 
 
 def dont_throw(func):
@@ -37,7 +27,3 @@ def dont_throw(func):
                 Config.exception_logger(e)
 
     return wrapper
-
-
-def should_emit_events():
-    return not Config.use_legacy_attributes

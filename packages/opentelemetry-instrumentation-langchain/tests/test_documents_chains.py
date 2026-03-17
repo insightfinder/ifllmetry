@@ -1,14 +1,11 @@
 import json
 
 import pytest
-from langchain_classic.chains.summarize import load_summarize_chain
-from langchain_text_splitters import CharacterTextSplitter
+from langchain.chains.summarize import load_summarize_chain
+from langchain.text_splitter import CharacterTextSplitter
 from langchain_cohere import ChatCohere
-from opentelemetry.sdk._logs import ReadableLogRecord
-from opentelemetry.semconv._incubating.attributes import (
-    gen_ai_attributes as GenAIAttributes,
-)
-from opentelemetry.semconv_ai import SpanAttributes
+from opentelemetry.semconv.ai import SpanAttributes
+
 
 # source: wikipedia
 INPUT_TEXT = """
@@ -35,130 +32,30 @@ INPUT_TEXT = """
 
 
 @pytest.mark.vcr
-def test_sequential_chain(instrument_legacy, span_exporter, log_exporter):
+def test_sequential_chain(exporter):
     small_docs = CharacterTextSplitter().create_documents(
         texts=[
             INPUT_TEXT,
         ]
     )
-    llm = ChatCohere(model="command-r-08-2024", temperature=0.75)
+    llm = ChatCohere(model="command", temperature=0.75)
     chain = load_summarize_chain(llm, chain_type="stuff").with_config(
         run_name="stuff_chain"
     )
     chain.invoke(small_docs)
 
-    spans = span_exporter.get_finished_spans()
+    spans = exporter.get_finished_spans()
 
     assert [
         "ChatCohere.chat",
-        "execute_task LLMChain",
+        "LLMChain.task",
         "stuff_chain.workflow",
     ] == [span.name for span in spans]
 
     stuff_span = next(span for span in spans if span.name == "stuff_chain.workflow")
 
-    data = json.loads(stuff_span.attributes[SpanAttributes.TRACELOOP_ENTITY_INPUT])
+    data = json.loads(stuff_span.attributes[SpanAttributes.IFTRACER_ENTITY_INPUT])
     assert data["inputs"].keys() == {"input_documents"}
     assert data["kwargs"]["name"] == "stuff_chain"
-    data = json.loads(stuff_span.attributes[SpanAttributes.TRACELOOP_ENTITY_OUTPUT])
+    data = json.loads(stuff_span.attributes[SpanAttributes.IFTRACER_ENTITY_OUTPUT])
     assert data["outputs"].keys() == {"output_text"}
-
-    logs = log_exporter.get_finished_logs()
-    assert (
-        len(logs) == 0
-    ), "Assert that it doesn't emit logs when use_legacy_attributes is True"
-
-
-@pytest.mark.vcr
-def test_sequential_chain_with_events_with_content(
-    instrument_with_content, span_exporter, log_exporter
-):
-    small_docs = CharacterTextSplitter().create_documents(
-        texts=[
-            INPUT_TEXT,
-        ]
-    )
-    llm = ChatCohere(model="command-r-08-2024", temperature=0.75)
-    chain = load_summarize_chain(llm, chain_type="stuff").with_config(
-        run_name="stuff_chain"
-    )
-    response = chain.invoke(small_docs)
-
-    spans = span_exporter.get_finished_spans()
-
-    assert [
-        "ChatCohere.chat",
-        "execute_task LLMChain",
-        "stuff_chain.workflow",
-    ] == [span.name for span in spans]
-
-    logs = log_exporter.get_finished_logs()
-    assert len(logs) == 2
-
-    # Validate user message Event
-    assert_message_in_logs(
-        logs[0],
-        "gen_ai.user.message",
-        {
-            "content": 'Write a concise summary of the following:\n\n\n"{}"\n\n\nCONCISE SUMMARY:'.format(
-                response["input_documents"][0].page_content
-            ),
-        },
-    )
-
-    # Validate AI choice Event - check key attributes, finish_reason varies by model
-    choice_log = logs[1]
-    assert choice_log.log_record.event_name == "gen_ai.choice"
-    choice_body = dict(choice_log.log_record.body)
-    assert choice_body["index"] == 0
-    assert "finish_reason" in choice_body
-    assert choice_body["message"]["content"] == response["output_text"]
-
-
-@pytest.mark.vcr
-def test_sequential_chain_with_events_with_no_content(
-    instrument_with_no_content, span_exporter, log_exporter
-):
-    small_docs = CharacterTextSplitter().create_documents(
-        texts=[
-            INPUT_TEXT,
-        ]
-    )
-    llm = ChatCohere(model="command-r-08-2024", temperature=0.75)
-    chain = load_summarize_chain(llm, chain_type="stuff").with_config(
-        run_name="stuff_chain"
-    )
-    chain.invoke(small_docs)
-
-    spans = span_exporter.get_finished_spans()
-
-    assert [
-        "ChatCohere.chat",
-        "execute_task LLMChain",
-        "stuff_chain.workflow",
-    ] == [span.name for span in spans]
-
-    logs = log_exporter.get_finished_logs()
-    assert len(logs) == 2
-
-    # Validate user message Event
-    assert_message_in_logs(logs[0], "gen_ai.user.message", {})
-
-    # Validate AI choice Event - check key attributes, finish_reason varies by model
-    choice_log = logs[1]
-    assert choice_log.log_record.event_name == "gen_ai.choice"
-    choice_body = dict(choice_log.log_record.body)
-    assert choice_body["index"] == 0
-    assert "finish_reason" in choice_body
-    assert choice_body["message"] == {}
-
-
-def assert_message_in_logs(log: ReadableLogRecord, event_name: str, expected_content: dict):
-    assert log.log_record.event_name == event_name
-    assert log.log_record.attributes.get(GenAIAttributes.GEN_AI_SYSTEM) == "langchain"
-
-    if not expected_content:
-        assert not log.log_record.body
-    else:
-        assert log.log_record.body
-        assert dict(log.log_record.body) == expected_content

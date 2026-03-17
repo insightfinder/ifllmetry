@@ -6,12 +6,12 @@ from openai import OpenAI
 
 import chromadb
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import workflow
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-Traceloop.init(app_name="chroma_app")
+Iftracer.init(app_name="chroma_app")
 
 embedding_function = OpenAIEmbeddingFunction(api_key=os.getenv("OPENAI_API_KEY"))
 

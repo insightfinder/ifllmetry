@@ -3561,7 +3561,7 @@ interactions:
       openai-model:
       - text-embedding-ada-002
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '122'
       openai-version:
@@ -3656,7 +3656,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '513'
       openai-version:
@@ -3853,7 +3853,7 @@ interactions:
       openai-model:
       - text-embedding-ada-002
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '20'
       openai-version:
@@ -4305,7 +4305,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '1789'
       openai-version:

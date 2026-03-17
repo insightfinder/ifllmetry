@@ -5,12 +5,12 @@ import os
 from pinecone import Pinecone
 from openai import OpenAI
 
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import task, workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import task, workflow
 
 client = OpenAI()
 
-Traceloop.init(app_name="pinecone_app")
+Iftracer.init(app_name="pinecone_app")
 
 pc = Pinecone(
     api_key=os.getenv("PINECONE_API_KEY"), environment=os.getenv("PINECONE_ENVIRONMENT")

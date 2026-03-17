@@ -81,7 +81,7 @@ interactions:
       openai-model:
       - gpt-4-0613
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '661'
       openai-version:

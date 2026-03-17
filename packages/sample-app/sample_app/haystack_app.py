@@ -10,9 +10,9 @@ from haystack.components.embedders import SentenceTransformersDocumentEmbedder
 from haystack.components.embedders import SentenceTransformersTextEmbedder
 from haystack.components.retrievers.in_memory import InMemoryEmbeddingRetriever
 
-from traceloop.sdk import Traceloop
+from iftracer.sdk import Iftracer
 
-Traceloop.init(app_name="haystack_example", disable_batch=True)
+Iftracer.init(app_name="haystack_example", disable_batch=True)
 
 
 def haystack_app():

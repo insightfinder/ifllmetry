@@ -3,16 +3,16 @@ import os
 import requests
 from openai import OpenAI
 
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import agent, workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import aagent, aworkflow
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
-Traceloop.init(app_name="joke_generation_service")
+Iftracer.init(app_name="joke_generation_service")
 
 
-@agent(name="base_joke_generator", method_name="generate_joke")
+@aagent(name="base_joke_generator", method_name="generate_joke")
 class JokeAgent:
     async def generate_joke(self):
         completion = client.chat.completions.create(
@@ -23,7 +23,7 @@ class JokeAgent:
         return completion.choices[0].message.content
 
 
-@agent(method_name="generate_joke")
+@aagent(method_name="generate_joke")
 class PirateJokeAgent(JokeAgent):
     async def generate_joke(self):
         return await self.generation_helper()
@@ -40,9 +40,9 @@ class PirateJokeAgent(JokeAgent):
         return completion.choices[0].message.content
 
 
-@workflow(name="jokes_generation")
+@aworkflow(name="jokes_generation")
 async def joke_generator():
-    Traceloop.set_association_properties({"user_id": "user_12345"})
+    Iftracer.set_association_properties({"user_id": "user_12345"})
 
     requests.get("https://www.google.com")
     print(f"Simple Joke: {await JokeAgent().generate_joke()}")

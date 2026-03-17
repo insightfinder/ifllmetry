@@ -1,6 +1,6 @@
 # OpenTelemetry LlamaIndex Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-llamaindex/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-llamaindex/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-llamaindex.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing complete LLM applications built with [LlamaIndex](ht
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-llamaindex
+pip install opentelemetry-if-instrumentation-llamaindex
 ```
 
 ## Example usage
@@ -26,8 +26,8 @@ LlamaIndexInstrumentor().instrument()
 
 However, you may want to disable this logging for privacy reasons, as they may contain highly sensitive data from your users. You may also simply want to reduce the size of your traces.
 
-To disable logging, set the `TRACELOOP_TRACE_CONTENT` environment variable to `false`.
+To disable logging, set the `IFTRACER_TRACE_CONTENT` environment variable to `false`.
 
 ```bash
-TRACELOOP_TRACE_CONTENT=false
+IFTRACER_TRACE_CONTENT=false
 ```

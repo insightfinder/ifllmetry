@@ -1,8 +1,8 @@
 import os
 from openai import AzureOpenAI
-from traceloop.sdk import Traceloop
+from iftracer.sdk import Iftracer
 
-Traceloop.init()
+Iftracer.init()
 
 client = AzureOpenAI(
     api_key=os.getenv("AZURE_OPENAI_API_KEY"),

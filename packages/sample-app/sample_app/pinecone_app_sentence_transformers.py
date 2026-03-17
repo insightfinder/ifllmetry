@@ -3,8 +3,8 @@ import os
 from pinecone import Pinecone
 from opentelemetry.sdk.trace.export import ConsoleSpanExporter
 
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import task, workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import task, workflow
 from sentence_transformers import SentenceTransformer
 
 # Set this to True for first run
@@ -18,7 +18,7 @@ if log_to_stdout:
     kwargs["exporter"] = ConsoleSpanExporter()
 
 # Init trace
-Traceloop.init(**kwargs)
+Iftracer.init(**kwargs)
 
 # Init pinecone
 pc = Pinecone(
@@ -26,7 +26,7 @@ pc = Pinecone(
 )
 
 
-index_name = "traceloop-dev"
+index_name = "iftracer-dev"
 print("Loading model...")
 model = SentenceTransformer("intfloat/e5-small-v2")
 

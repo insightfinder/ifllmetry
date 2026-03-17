@@ -4,7 +4,7 @@ Contact: security@traceloop.com
 
 Based on [https://supabase.com/.well-known/security.txt](https://supabase.com/.well-known/security.txt)
 
-We place a high priority on the security of our systems at Traceloop. However, no matter how hard we try to make our systems secure, vulnerabilities can still exist.
+We place a high priority on the security of our systems at Iftracer. However, no matter how hard we try to make our systems secure, vulnerabilities can still exist.
 
 In the event that you discover a vulnerability, please let us know so we can address it as soon as possible. We would like to ask you to help us better protect our clients and our systems.
 

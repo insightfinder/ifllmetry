@@ -1,15 +1,15 @@
 import os
 from openai import OpenAI
 
-from traceloop.sdk import Traceloop
+from iftracer.sdk import Iftracer
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-Traceloop.init()
+Iftracer.init()
 
 
 response = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="gpt-3.5-turbo-0613",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {

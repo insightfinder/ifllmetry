@@ -1,9 +1,9 @@
 from anthropic import Anthropic
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import workflow
 
 
-Traceloop.init()
+Iftracer.init()
 
 
 @workflow(name="pirate_joke_streaming_generator")

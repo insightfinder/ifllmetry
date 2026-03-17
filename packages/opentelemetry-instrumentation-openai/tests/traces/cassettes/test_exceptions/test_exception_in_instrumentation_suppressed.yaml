@@ -75,7 +75,7 @@ interactions:
       openai-model:
       - gpt-3.5-turbo-0125
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '906'
       openai-version:

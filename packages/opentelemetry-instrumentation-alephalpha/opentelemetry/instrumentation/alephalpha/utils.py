@@ -1,7 +1,6 @@
 import logging
-import traceback
-
 from opentelemetry.instrumentation.alephalpha.config import Config
+import traceback
 
 
 def dont_throw(func):

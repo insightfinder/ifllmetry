@@ -1,16 +1,16 @@
 import asyncio
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers.openai_functions import JsonOutputFunctionsParser
+from langchain.prompts import ChatPromptTemplate
+from langchain.output_parsers.openai_functions import JsonOutputFunctionsParser
 from langchain_community.utils.openai_functions import (
     convert_pydantic_to_openai_function,
 )
 from langchain_openai import ChatOpenAI
-from pydantic import BaseModel, Field
+from langchain_core.pydantic_v1 import BaseModel, Field
 
 
-from traceloop.sdk import Traceloop
+from iftracer.sdk import Iftracer
 
-Traceloop.init(app_name="lcel_example")
+Iftracer.init(app_name="lcel_example")
 
 
 class Joke(BaseModel):
@@ -30,9 +30,7 @@ async def chain():
     output_parser = JsonOutputFunctionsParser()
 
     chain = prompt | model.bind(functions=openai_functions) | output_parser
-    return await chain.ainvoke(
-        {"input": "tell me a short joke"}, {"metadata": {"user_id": "1234"}}
-    )
+    return await chain.ainvoke({"input": "tell me a short joke"})
 
 
 print(asyncio.run(chain()))

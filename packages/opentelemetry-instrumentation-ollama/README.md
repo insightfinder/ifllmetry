@@ -1,6 +1,6 @@
 # OpenTelemetry Ollama Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-ollama/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-ollama/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-ollama.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing calls to any of Ollama's endpoints sent with the off
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-ollama
+pip install opentelemetry-if-instrumentation-ollama
 ```
 
 ## Example usage
@@ -26,8 +26,8 @@ OllamaInstrumentor().instrument()
 
 However, you may want to disable this logging for privacy reasons, as they may contain highly sensitive data from your users. You may also simply want to reduce the size of your traces.
 
-To disable logging, set the `TRACELOOP_TRACE_CONTENT` environment variable to `false`.
+To disable logging, set the `IFTRACER_TRACE_CONTENT` environment variable to `false`.
 
 ```bash
-TRACELOOP_TRACE_CONTENT=false
+IFTRACER_TRACE_CONTENT=false
 ```

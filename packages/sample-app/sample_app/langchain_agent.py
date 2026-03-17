@@ -1,13 +1,13 @@
-from langchain_classic.agents import AgentType
-from langchain_classic.agents import initialize_agent, Tool
-from langchain_classic.chains import LLMMathChain
+from langchain.agents import AgentType
+from langchain.agents import initialize_agent, Tool
+from langchain.chains import LLMMathChain
 from langchain_community.llms.openai import OpenAI
-from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
+from langchain.utilities import DuckDuckGoSearchAPIWrapper
 
 
-from traceloop.sdk import Traceloop
+from iftracer.sdk import Iftracer
 
-Traceloop.init(app_name="langchain_agent")
+Iftracer.init(app_name="langchain_agent")
 
 
 def langchain_app():

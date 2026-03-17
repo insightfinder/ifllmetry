@@ -1,13 +1,13 @@
 import litellm
 
 
-def test_traceloop_logging():
+def test_iftracer_logging():
     try:
-        litellm.success_callback = ["traceloop"]
-        from traceloop.sdk import Traceloop
-        from traceloop.sdk.instruments import Instruments
+        litellm.success_callback = ["iftracer"]
+        from iftracer.sdk import Iftracer
+        from iftracer.sdk.instruments import Instruments
 
-        Traceloop.init(app_name="...", instruments=set([Instruments.OPENAI]))
+        Iftracer.init(app_name="...", instruments=set([Instruments.OPENAI]))
         litellm.set_verbose = False
         response = litellm.completion(
             model="gpt-3.5-turbo",
@@ -21,4 +21,4 @@ def test_traceloop_logging():
         pass
 
 
-test_traceloop_logging()
+test_iftracer_logging()

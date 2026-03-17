@@ -15,7 +15,7 @@ interactions:
         content-type:
           - application/json
         host:
-          - traceloop-stg.openai.azure.com
+          - iftracer-stg.openai.azure.com
         user-agent:
           - AzureOpenAI/Python 1.14.3
         x-stainless-arch:
@@ -33,7 +33,7 @@ interactions:
         x-stainless-runtime-version:
           - 3.12.1
       method: POST
-      uri: https://traceloop-stg.openai.azure.com/openai/deployments/openllmetry-testing/chat/completions?api-version=2024-02-01
+      uri: https://traceloop-stg.openai.azure.com//openai/deployments/openllmetry-testing/chat/completions?api-version=2024-02-01
     response:
       body:
         string:

@@ -6,11 +6,11 @@ import os
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from traceloop.sdk import Traceloop
+from iftracer.sdk import Iftracer
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-Traceloop.init(app_name="llama_index_example")
+Iftracer.init(app_name="llama_index_example")
 
 chroma_client = chromadb.EphemeralClient()
 chroma_collection = chroma_client.create_collection("quickstart")

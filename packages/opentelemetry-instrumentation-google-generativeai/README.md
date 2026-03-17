@@ -1,6 +1,6 @@
 # OpenTelemetry Google Generative AI Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-google-generativeai/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-google-generativeai/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-google-generativeai.svg">
 </a>
 
@@ -9,13 +9,13 @@ This library allows tracing Google Gemini prompts and completions sent with the 
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-google-generativeai
+pip install opentelemetry-if-instrumentation-google-generativeai
 ```
 
 ## Example usage
 
 ```python
-from opentelemetry.instrumentation.google_generativeai import GoogleGenerativeAiInstrumentor
+from opentelemetry.instrumentation.google-generativeai import GoogleGenerativeAiInstrumentor
 
 GoogleGenerativeAiInstrumentor().instrument()
 ```
@@ -26,8 +26,8 @@ GoogleGenerativeAiInstrumentor().instrument()
 
 However, you may want to disable this logging for privacy reasons, as they may contain highly sensitive data from your users. You may also simply want to reduce the size of your traces.
 
-To disable logging, set the `TRACELOOP_TRACE_CONTENT` environment variable to `false`.
+To disable logging, set the `IFTRACER_TRACE_CONTENT` environment variable to `false`.
 
 ```bash
-TRACELOOP_TRACE_CONTENT=false
+IFTRACER_TRACE_CONTENT=false
 ```

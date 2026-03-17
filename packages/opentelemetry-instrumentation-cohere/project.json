@@ -5,9 +5,9 @@
   "sourceRoot": "packages/opentelemetry-instrumentation-cohere/opentelemetry/instrumentation/cohere",
   "targets": {
     "lock": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:run-commands",
       "options": {
-        "command": "uv lock",
+        "command": "poetry lock --no-update",
         "cwd": "packages/opentelemetry-instrumentation-cohere"
       }
     },
@@ -25,9 +25,7 @@
     },
     "build": {
       "executor": "@nxlv/python:build",
-      "outputs": [
-        "{projectRoot}/dist"
-      ],
+      "outputs": ["{projectRoot}/dist"],
       "options": {
         "outputPath": "packages/opentelemetry-instrumentation-cohere/dist",
         "publish": false,
@@ -36,32 +34,37 @@
       }
     },
     "install": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:install",
       "options": {
-        "command": "uv sync --all-groups",
-        "cwd": "packages/opentelemetry-instrumentation-cohere"
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
       }
     },
     "lint": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:flake8",
+      "outputs": [
+        "{workspaceRoot}/reports/packages/opentelemetry-instrumentation-cohere/pylint.txt"
+      ],
       "options": {
-        "command": "uv run ruff check .",
-        "cwd": "packages/opentelemetry-instrumentation-cohere"
+        "outputFile": "reports/packages/opentelemetry-instrumentation-cohere/pylint.txt"
       }
     },
     "test": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:run-commands",
       "outputs": [
         "{workspaceRoot}/reports/packages/opentelemetry-instrumentation-cohere/unittests",
         "{workspaceRoot}/coverage/packages/opentelemetry-instrumentation-cohere"
       ],
       "options": {
-        "command": "uv run pytest tests/",
+        "command": "poetry run pytest tests/",
         "cwd": "packages/opentelemetry-instrumentation-cohere"
       }
     },
     "build-release": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:run-commands",
       "options": {
         "commands": [
           "chmod +x ../../scripts/build-release.sh",
@@ -71,7 +74,5 @@
       }
     }
   },
-  "tags": [
-    "instrumentation"
-  ]
+  "tags": ["instrumentation"]
 }

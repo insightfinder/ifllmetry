@@ -1,6 +1,5 @@
 import logging
 import traceback
-import os
 from opentelemetry.instrumentation.milvus.config import Config
 
 
@@ -27,7 +26,3 @@ def dont_throw(func):
                 Config.exception_logger(e)
 
     return wrapper
-
-
-def is_metrics_enabled() -> bool:
-    return (os.getenv("TRACELOOP_METRICS_ENABLED") or "true").lower() == "true"

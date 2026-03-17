@@ -1,18 +1,18 @@
 import os
 
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import task, agent, workflow, tool
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import task, agent, workflow, tool
 
 from openai import OpenAI
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-Traceloop.init(app_name="joke_generation_service")
+Iftracer.init(app_name="joke_generation_service")
 
 
 @task(name="joke_creation", version=1)
 def create_joke():
-    Traceloop.set_prompt(
+    Iftracer.set_prompt(
         "Tell me a joke about {subject}", {"subject": "opentelemetry"}, 1
     )
     completion = client.chat.completions.create(
@@ -61,24 +61,14 @@ def generate_signature(joke: str):
 
 @workflow(name="pirate_joke_generator")
 def joke_workflow():
-    Traceloop.set_association_properties(
+    Iftracer.set_association_properties(
         {"user_id": "user_12345", "chat_id": "chat_1234"}
     )
 
     eng_joke = create_joke()
     pirate_joke = translate_joke_to_pirate(eng_joke)
     signature = generate_signature(pirate_joke)
-
-    traceloop_client = Traceloop.get()
-    traceloop_client.user_feedback.create(
-        "sample-annotation-task",
-        "user_12345",
-        {"sentiment": "positive", "score": 0.95, "tones": ["happy", "surprised"]},
-    )
-
-    result = pirate_joke + "\n\n" + signature
-    print(result)
-    return result
+    print(pirate_joke + "\n\n" + signature)
 
 
 joke_workflow()

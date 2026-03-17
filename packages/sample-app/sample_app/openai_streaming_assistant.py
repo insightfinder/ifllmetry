@@ -1,8 +1,8 @@
 from typing_extensions import override
 from openai import OpenAI, AssistantEventHandler
-from traceloop.sdk import Traceloop
+from iftracer.sdk import Iftracer
 
-Traceloop.init()
+Iftracer.init()
 
 client = OpenAI()
 

@@ -1,28 +1,25 @@
 from typing import Collection
 
-from opentelemetry._logs import get_logger
 from opentelemetry.instrumentation.instrumentor import BaseInstrumentor
+from opentelemetry.trace import get_tracer
+from opentelemetry.metrics import get_meter
+from wrapt import wrap_function_wrapper
+
 from opentelemetry.instrumentation.openai.shared.chat_wrappers import (
-    achat_wrapper,
     chat_wrapper,
+    achat_wrapper,
 )
 from opentelemetry.instrumentation.openai.shared.completion_wrappers import (
-    acompletion_wrapper,
     completion_wrapper,
+    acompletion_wrapper,
 )
-from opentelemetry.instrumentation.openai.shared.config import Config
 from opentelemetry.instrumentation.openai.shared.embeddings_wrappers import (
-    aembeddings_wrapper,
     embeddings_wrapper,
+    aembeddings_wrapper,
 )
 from opentelemetry.instrumentation.openai.utils import is_metrics_enabled
 from opentelemetry.instrumentation.openai.version import __version__
-from opentelemetry.instrumentation.utils import unwrap
-from opentelemetry.metrics import get_meter
-from opentelemetry.semconv._incubating.metrics import gen_ai_metrics as GenAIMetrics
-from opentelemetry.semconv_ai import Meters
-from opentelemetry.trace import get_tracer
-from wrapt import wrap_function_wrapper
+from opentelemetry.semconv.ai import Meters
 
 _instruments = ("openai >= 0.27.0", "openai < 1.0.0")
 
@@ -37,12 +34,6 @@ class OpenAIV0Instrumentor(BaseInstrumentor):
 
         meter_provider = kwargs.get("meter_provider")
         meter = get_meter(__name__, __version__, meter_provider)
-
-        if not Config.use_legacy_attributes:
-            logger_provider = kwargs.get("logger_provider")
-            Config.event_logger = get_logger(
-                __name__, __version__, logger_provider=logger_provider
-            )
 
         if is_metrics_enabled():
             tokens_histogram = meter.create_histogram(
@@ -70,7 +61,7 @@ class OpenAIV0Instrumentor(BaseInstrumentor):
             )
 
             streaming_time_to_first_token = meter.create_histogram(
-                name=GenAIMetrics.GEN_AI_SERVER_TIME_TO_FIRST_TOKEN,
+                name=Meters.LLM_STREAMING_TIME_TO_FIRST_TOKEN,
                 unit="s",
                 description="Time to first token in streaming chat completions",
             )
@@ -107,16 +98,9 @@ class OpenAIV0Instrumentor(BaseInstrumentor):
                 embeddings_exception_counter,
             ) = (None, None, None)
 
+        wrap_function_wrapper("openai", "Completion.create", completion_wrapper(tracer))
         wrap_function_wrapper(
-            "openai",
-            "Completion.create",
-            completion_wrapper(tracer),
-        )
-
-        wrap_function_wrapper(
-            "openai",
-            "Completion.acreate",
-            acompletion_wrapper(tracer),
+            "openai", "Completion.acreate", acompletion_wrapper(tracer)
         )
         wrap_function_wrapper(
             "openai",
@@ -168,9 +152,4 @@ class OpenAIV0Instrumentor(BaseInstrumentor):
         )
 
     def _uninstrument(self, **kwargs):
-        unwrap("openai", "Completion.create")
-        unwrap("openai", "Completion.acreate")
-        unwrap("openai", "ChatCompletion.create")
-        unwrap("openai", "ChatCompletion.acreate")
-        unwrap("openai", "Embedding.create")
-        unwrap("openai", "Embedding.acreate")
+        pass

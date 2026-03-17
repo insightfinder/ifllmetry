@@ -84,7 +84,7 @@ interactions:
       openai-model:
       - gpt-3.5-turbo-instruct
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '1553'
       openai-version:
@@ -204,7 +204,7 @@ interactions:
       openai-model:
       - gpt-3.5-turbo-instruct
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '3284'
       openai-version:

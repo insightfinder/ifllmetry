@@ -2,13 +2,13 @@ import os
 from openai import OpenAI
 
 
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import task, workflow
-from traceloop.sdk.prompts import get_prompt
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import task, workflow
+from iftracer.sdk.prompts import get_prompt
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-Traceloop.init(app_name="prompt_registry_example_app")
+Iftracer.init(app_name="prompt_registry_example_app")
 
 
 @task(name="generate_joke")

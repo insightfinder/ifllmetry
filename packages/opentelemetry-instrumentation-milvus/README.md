@@ -1,6 +1,6 @@
 # OpenTelemetry Milvus Instrumentation
 
-<a href="https://pypi.org/project/opentelemetry-instrumentation-milvus/">
+<a href="https://pypi.org/project/opentelemetry-if-instrumentation-milvus/">
     <img src="https://badge.fury.io/py/opentelemetry-instrumentation-milvus.svg">
 </a>
 
@@ -9,7 +9,7 @@ This library allows tracing client-side calls to Milvus vector DB sent with the 
 ## Installation
 
 ```bash
-pip install opentelemetry-instrumentation-milvus
+pip install opentelemetry-if-instrumentation-milvus
 ```
 
 ## Example usage

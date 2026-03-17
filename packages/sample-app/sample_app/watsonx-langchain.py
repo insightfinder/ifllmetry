@@ -3,8 +3,8 @@ import types
 from ibm_watsonx_ai.metanames import GenTextParamsMetaNames
 from ibm_watsonx_ai.foundation_models import ModelInference
 from pprint import pprint
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import workflow
 from langchain_ibm import WatsonxLLM
 
 from dotenv import load_dotenv
@@ -12,7 +12,7 @@ load_dotenv()
 
 os.environ['OTEL_EXPORTER_OTLP_INSECURE'] = 'True'
 
-Traceloop.init(app_name="watsonx_llm_langchain_question")
+Iftracer.init(app_name="watsonx_llm_langchain_question")
 
 
 def watsonx_llm_init() -> ModelInference:

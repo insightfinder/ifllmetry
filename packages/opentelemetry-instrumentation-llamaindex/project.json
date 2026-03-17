@@ -2,12 +2,12 @@
   "name": "opentelemetry-instrumentation-llamaindex",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "packages/opentelemetry-instrumentation-llamaindex/opentelemetry/instrumentation/llamaindex",
+  "sourceRoot": "packages/opentelemetry-instrumentation-llamaindex/opentelemetry_instrumentation_anthropic",
   "targets": {
     "lock": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:run-commands",
       "options": {
-        "command": "uv lock",
+        "command": "poetry lock --no-update",
         "cwd": "packages/opentelemetry-instrumentation-llamaindex"
       }
     },
@@ -25,9 +25,7 @@
     },
     "build": {
       "executor": "@nxlv/python:build",
-      "outputs": [
-        "{projectRoot}/dist"
-      ],
+      "outputs": ["{projectRoot}/dist"],
       "options": {
         "outputPath": "packages/opentelemetry-instrumentation-llamaindex/dist",
         "publish": false,
@@ -36,32 +34,37 @@
       }
     },
     "install": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:install",
       "options": {
-        "command": "uv sync --all-groups",
-        "cwd": "packages/opentelemetry-instrumentation-llamaindex"
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
       }
     },
     "lint": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:flake8",
+      "outputs": [
+        "{workspaceRoot}/reports/packages/opentelemetry-instrumentation-llamaindex/pylint.txt"
+      ],
       "options": {
-        "command": "uv run ruff check .",
-        "cwd": "packages/opentelemetry-instrumentation-llamaindex"
+        "outputFile": "reports/packages/opentelemetry-instrumentation-llamaindex/pylint.txt"
       }
     },
     "test": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:run-commands",
       "outputs": [
         "{workspaceRoot}/reports/packages/opentelemetry-instrumentation-llamaindex/unittests",
         "{workspaceRoot}/coverage/packages/opentelemetry-instrumentation-llamaindex"
       ],
       "options": {
-        "command": "uv run pytest tests/",
+        "command": "poetry run pytest tests/",
         "cwd": "packages/opentelemetry-instrumentation-llamaindex"
       }
     },
     "build-release": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:run-commands",
       "options": {
         "commands": [
           "chmod +x ../../scripts/build-release.sh",
@@ -71,7 +74,5 @@
       }
     }
   },
-  "tags": [
-    "instrumentation"
-  ]
+  "tags": ["instrumentation"]
 }

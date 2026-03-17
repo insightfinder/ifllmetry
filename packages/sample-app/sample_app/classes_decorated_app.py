@@ -2,12 +2,12 @@ import os
 
 from openai import OpenAI
 
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import agent, workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import agent, workflow
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-Traceloop.init(app_name="joke_generation_service")
+Iftracer.init(app_name="joke_generation_service")
 
 
 @agent(name="base_joke_generator", method_name="generate_joke")
@@ -37,7 +37,7 @@ class PirateJokeAgent(JokeAgent):
 
 @workflow(name="jokes_generation")
 def joke_generator():
-    Traceloop.set_association_properties({"user_id": "user_12345"})
+    Iftracer.set_association_properties({"user_id": "user_12345"})
 
     print(f"Simple Joke: {JokeAgent().generate_joke()}")
     print(f"Pirate Joke: {PirateJokeAgent().generate_joke()}")

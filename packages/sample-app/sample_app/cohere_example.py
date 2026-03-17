@@ -1,9 +1,9 @@
 import os
 import cohere
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import workflow
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import workflow
 
-Traceloop.init()
+Iftracer.init()
 
 co = cohere.Client(os.environ.get("COHERE_API_KEY"))
 

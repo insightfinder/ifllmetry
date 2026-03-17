@@ -1,24 +1,25 @@
-import functools
-
 import pytest
+
+from wrapt import wrap_function_wrapper
 
 
 def test_inner_exception_isnt_caught(openai_client):
     should_wrap = True
 
-    def throw_exception(f):
-        @functools.wraps(f)
-        def wrapper(*args, **kwargs):
-            if should_wrap:
-                raise Exception("Test exception")
-            else:
-                return f(*args, **kwargs)
+    def just_throw(wrapped, instance, args, kwargs):
+        if should_wrap:
             raise Exception("Test exception")
+        else:
+            return wrapped(*args, **kwargs)
 
-        return wrapper
+    wrap_function_wrapper(
+        "openai.resources.chat.completions",
+        "Completions.create",
+        just_throw,
+    )
 
     with pytest.raises(Exception):
-        throw_exception(openai_client.chat.completions.create)(
+        openai_client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": "Tell me a joke about opentelemetry"}
@@ -32,19 +33,21 @@ def test_inner_exception_isnt_caught(openai_client):
 def test_exception_in_instrumentation_suppressed(openai_client):
     should_wrap = True
 
-    def scramble_response(f):
-        @functools.wraps(f)
-        def wrapper(*args, **kwargs):
-            if should_wrap:
-                response = f(*args, **kwargs)
-                response = {}
-                return response
-            else:
-                return f(*args, **kwargs)
+    def scramble_response(wrapped, instance, args, kwargs):
+        if should_wrap:
+            response = wrapped(*args, **kwargs)
+            response = {}
+            return response
+        else:
+            return wrapped(*args, **kwargs)
 
-        return wrapper
+    wrap_function_wrapper(
+        "openai.resources.chat.completions",
+        "Completions.create",
+        scramble_response,
+    )
 
-    scramble_response(openai_client.chat.completions.create)(
+    openai_client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": "Tell me a joke about opentelemetry"}],
     )

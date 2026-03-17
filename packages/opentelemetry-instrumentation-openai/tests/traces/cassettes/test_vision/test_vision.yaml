@@ -71,7 +71,7 @@ interactions:
       openai-model:
       - gpt-4-1106-vision-preview
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '2712'
       openai-version:
@@ -164,7 +164,7 @@ interactions:
       openai-model:
       - gpt-4-1106-vision-preview
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '1795'
       openai-version:

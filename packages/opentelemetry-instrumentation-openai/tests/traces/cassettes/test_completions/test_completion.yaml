@@ -72,7 +72,7 @@ interactions:
       openai-model:
       - davinci-002
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '358'
       openai-version:

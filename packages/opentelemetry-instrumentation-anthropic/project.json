@@ -5,9 +5,9 @@
   "sourceRoot": "packages/opentelemetry-instrumentation-anthropic/opentelemetry_instrumentation_anthropic",
   "targets": {
     "lock": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:run-commands",
       "options": {
-        "command": "uv lock",
+        "command": "poetry lock --no-update",
         "cwd": "packages/opentelemetry-instrumentation-anthropic"
       }
     },
@@ -25,9 +25,7 @@
     },
     "build": {
       "executor": "@nxlv/python:build",
-      "outputs": [
-        "{projectRoot}/dist"
-      ],
+      "outputs": ["{projectRoot}/dist"],
       "options": {
         "outputPath": "packages/opentelemetry-instrumentation-anthropic/dist",
         "publish": false,
@@ -36,32 +34,37 @@
       }
     },
     "install": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:install",
       "options": {
-        "command": "uv sync --all-groups",
-        "cwd": "packages/opentelemetry-instrumentation-anthropic"
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
       }
     },
     "lint": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:flake8",
+      "outputs": [
+        "{workspaceRoot}/reports/packages/opentelemetry-instrumentation-anthropic/pylint.txt"
+      ],
       "options": {
-        "command": "uv run ruff check .",
-        "cwd": "packages/opentelemetry-instrumentation-anthropic"
+        "outputFile": "reports/packages/opentelemetry-instrumentation-anthropic/pylint.txt"
       }
     },
     "test": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:run-commands",
       "outputs": [
         "{workspaceRoot}/reports/packages/opentelemetry-instrumentation-anthropic/unittests",
         "{workspaceRoot}/coverage/packages/opentelemetry-instrumentation-anthropic"
       ],
       "options": {
-        "command": "uv run pytest tests/",
+        "command": "poetry run pytest tests/",
         "cwd": "packages/opentelemetry-instrumentation-anthropic"
       }
     },
     "build-release": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:run-commands",
       "options": {
         "commands": [
           "chmod +x ../../scripts/build-release.sh",
@@ -71,7 +74,5 @@
       }
     }
   },
-  "tags": [
-    "instrumentation"
-  ]
+  "tags": ["instrumentation"]
 }

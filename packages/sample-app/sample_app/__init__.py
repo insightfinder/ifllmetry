@@ -1,1 +1,1 @@
-"""Sample Application using Traceloop SDK"""
+"""Sample Application using Iftracer SDK"""

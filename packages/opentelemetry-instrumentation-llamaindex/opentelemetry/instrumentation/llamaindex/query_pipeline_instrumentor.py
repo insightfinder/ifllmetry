@@ -9,7 +9,7 @@ from opentelemetry.instrumentation.llamaindex.utils import (
     process_response,
     start_as_current_span_async,
 )
-from opentelemetry.semconv_ai import SpanAttributes, TraceloopSpanKindValues
+from opentelemetry.semconv.ai import SpanAttributes, TraceloopSpanKindValues
 
 V10_MODULE_NAME = "llama_index.core.query_pipeline.query"
 V10_LEGACY_MODULE_NAME = "llama_index.legacy.query_pipeline.query"
@@ -50,10 +50,10 @@ def run_wrapper(tracer, wrapped, instance, args, kwargs):
 
     with tracer.start_as_current_span(f"{WORKFLOW_NAME}.workflow") as span:
         span.set_attribute(
-            SpanAttributes.TRACELOOP_SPAN_KIND,
+            SpanAttributes.IFTRACER_SPAN_KIND,
             TraceloopSpanKindValues.WORKFLOW.value,
         )
-        span.set_attribute(SpanAttributes.TRACELOOP_ENTITY_NAME, WORKFLOW_NAME)
+        span.set_attribute(SpanAttributes.IFTRACER_ENTITY_NAME, WORKFLOW_NAME)
 
         process_request(span, args, kwargs)
         res = wrapped(*args, **kwargs)
@@ -69,10 +69,10 @@ async def arun_wrapper(tracer, wrapped, instance, args, kwargs):
         tracer=tracer, name=f"{WORKFLOW_NAME}.workflow"
     ) as span:
         span.set_attribute(
-            SpanAttributes.TRACELOOP_SPAN_KIND,
+            SpanAttributes.IFTRACER_SPAN_KIND,
             TraceloopSpanKindValues.WORKFLOW.value,
         )
-        span.set_attribute(SpanAttributes.TRACELOOP_ENTITY_NAME, WORKFLOW_NAME)
+        span.set_attribute(SpanAttributes.IFTRACER_ENTITY_NAME, WORKFLOW_NAME)
 
         process_request(span, args, kwargs)
         res = await wrapped(*args, **kwargs)

@@ -7,9 +7,9 @@ import os
 import weaviate
 import weaviate.classes as wvc
 from opentelemetry.sdk.trace.export import ConsoleSpanExporter
-from traceloop.sdk import Traceloop
-from traceloop.sdk.decorators import task, workflow
-from traceloop.sdk.instruments import Instruments
+from iftracer.sdk import Iftracer
+from iftracer.sdk.decorators import task, workflow
+from iftracer.sdk.instruments import Instruments
 
 
 BACKEND = {
@@ -195,14 +195,14 @@ def example_workflow2(client):
 
 
 if __name__ == "__main__":
-    Traceloop.init(
+    Iftracer.init(
         app_name="weaviate_app",
         disable_batch=True,
-        exporter=None if os.getenv("TRACELOOP_API_KEY") else ConsoleSpanExporter(),
+        exporter=None if os.getenv("IFTRACER_API_KEY") else ConsoleSpanExporter(),
         # comment below if you would like to see everything
         instruments={Instruments.WEAVIATE},
     )
-    print("Traceloop initialized")
+    print("Iftracer initialized")
 
     headers = {}
     backend = None

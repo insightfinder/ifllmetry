@@ -216,7 +216,7 @@ interactions:
       openai-model:
       - text-embedding-ada-002
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '19'
       openai-version:
@@ -882,7 +882,7 @@ interactions:
       openai-model:
       - davinci-002
       openai-organization:
-      - traceloop
+      - iftracer
       openai-processing-ms:
       - '2511'
       openai-version:

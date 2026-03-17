@@ -228,12 +228,8 @@ class WeaviateInstrumentor(BaseInstrumentor):
             wrap_module = wrapped_method.get("module")
             wrap_object = wrapped_method.get("object")
             wrap_method = wrapped_method.get("method")
-            try:
-                module = importlib.import_module(wrap_module)
-            except ModuleNotFoundError:
-                continue
-            obj = getattr(module, wrap_object, None)
-            if obj and hasattr(obj, wrap_method):
+            module = importlib.import_module(wrap_module)
+            if getattr(module, wrap_object, None):
                 wrap_function_wrapper(
                     wrap_module,
                     f"{wrap_object}.{wrap_method}",
@@ -244,11 +240,7 @@ class WeaviateInstrumentor(BaseInstrumentor):
         for wrapped_method in WRAPPED_METHODS:
             wrap_module = wrapped_method.get("module")
             wrap_object = wrapped_method.get("object")
-            wrap_method = wrapped_method.get("method")
-            try:
-                module = importlib.import_module(wrap_module)
-            except ModuleNotFoundError:
-                continue
-            obj = getattr(module, wrap_object, None)
-            if obj and hasattr(obj, wrap_method):
-                unwrap(obj, wrap_method)
+            module = importlib.import_module(wrap_module)
+            wrapped = getattr(module, wrap_object, None)
+            if wrapped:
+                unwrap(wrapped, wrapped_method.get("method"))
