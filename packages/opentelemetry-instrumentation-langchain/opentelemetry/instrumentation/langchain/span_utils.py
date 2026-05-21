@@ -137,6 +137,8 @@ def set_llm_request(
                 f"{GenAIAttributes.GEN_AI_PROMPT}.{i}.content",
                 msg,
             )
+        if prompts:
+            _set_span_attribute(span, "chat.prompt", "\n".join(prompts))
 
 
 def set_chat_request(
@@ -163,6 +165,7 @@ def set_chat_request(
             )
 
         i = 0
+        chat_prompt_parts = []
         for message in messages:
             for msg in message:
                 _set_span_attribute(
@@ -192,6 +195,8 @@ def set_chat_request(
                     f"{GenAIAttributes.GEN_AI_PROMPT}.{i}.content",
                     content,
                 )
+                if content:
+                    chat_prompt_parts.append(content)
 
                 if msg.type == "tool" and hasattr(msg, "tool_call_id"):
                     _set_span_attribute(
@@ -202,12 +207,16 @@ def set_chat_request(
 
                 i += 1
 
+        if chat_prompt_parts:
+            _set_span_attribute(span, "chat.prompt", "\n".join(chat_prompt_parts))
+
 
 def set_chat_response(span: Span, response: LLMResult) -> None:
     if not should_send_prompts():
         return
 
     i = 0
+    first_response = True
     for generations in response.generations:
         for generation in generations:
             prefix = f"{GenAIAttributes.GEN_AI_COMPLETION}.{i}"
@@ -240,6 +249,9 @@ def set_chat_response(span: Span, response: LLMResult) -> None:
                     f"{prefix}.content",
                     content,
                 )
+                if first_response:
+                    _set_span_attribute(span, "chat.response", content)
+                    first_response = False
 
             # Set finish reason if available
             if generation.generation_info and generation.generation_info.get("finish_reason"):

@@ -7,8 +7,8 @@ exclude_lines = ['if TYPE_CHECKING:']
 show_missing = true
 
 [tool.poetry]
-name = "opentelemetry-if-instrumentation-langchain"
-version = "0.25.6"
+name = "opentelemetry-instrumentation-langchain"
+version = "0.53.2"
 description = "OpenTelemetry Langchain instrumentation"
 authors = [
   "Gal Kleinman <gal@traceloop.com>",
@@ -23,11 +23,11 @@ readme = "README.md"
 include = "opentelemetry/instrumentation/langchain"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4"
-opentelemetry-api = "^1.25.0"
-opentelemetry-instrumentation = "^0.46b0"
-opentelemetry-semantic-conventions = "^0.46b0"
-opentelemetry-if-semantic-conventions-ai = "0.3.6"
+python = ">=3.10,<4"
+opentelemetry-api = ">=1.38.0,<2"
+opentelemetry-instrumentation = ">=0.59b0"
+opentelemetry-semantic-conventions = ">=0.59b0"
+opentelemetry-if-semantic-conventions-ai = ">=0.4.13"
 
 [tool.poetry.group.dev.dependencies]
 autopep8 = "^2.2.0"
