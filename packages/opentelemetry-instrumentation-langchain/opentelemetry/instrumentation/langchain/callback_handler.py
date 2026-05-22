@@ -584,11 +584,23 @@ class TraceloopCallbackHandler(BaseCallbackHandler):
         _set_span_attribute(span, SpanAttributes.GEN_AI_TASK_STATUS, "success")
 
         if not should_emit_events() and should_send_prompts():
-            output_json = json.dumps(
-                {"outputs": outputs, "kwargs": kwargs},
-                ensure_ascii=False,
-                cls=CallbackFilteredJSONEncoder,
-            )
+            # Try to extract actual content from traceloop.entity.output structure
+            extracted_content = self._extract_entity_output_content(outputs)
+
+            if extracted_content is not None:
+                # Replace the whole "outputs" value with the extracted content
+                output_json = json.dumps(
+                    {"outputs": extracted_content, "kwargs": kwargs},
+                    ensure_ascii=False,
+                    cls=CallbackFilteredJSONEncoder,
+                )
+            else:
+                output_json = json.dumps(
+                    {"outputs": outputs, "kwargs": kwargs},
+                    ensure_ascii=False,
+                    cls=CallbackFilteredJSONEncoder,
+                )
+
             # Set both for backwards compatibility
             span.set_attribute(SpanAttributes.TRACELOOP_ENTITY_OUTPUT, output_json)
             span.set_attribute(SpanAttributes.GEN_AI_TASK_OUTPUT, output_json)
@@ -602,7 +614,6 @@ class TraceloopCallbackHandler(BaseCallbackHandler):
                     )
                 )
             except Exception:
-                # If context reset fails, it's not critical for functionality
                 pass
 
     @dont_throw
@@ -1154,3 +1165,26 @@ class TraceloopCallbackHandler(BaseCallbackHandler):
                     finish_reason=finish_reason,
                 )
             )
+
+
+    def _extract_entity_output_content(self, output: Any) -> Optional[str]:
+        """Extract the actual content from a traceloop.entity.output structure."""
+        try:
+            if isinstance(output, list) and len(output) > 0:
+                first_item = output[0]
+                if isinstance(first_item, dict) and first_item.get("key") == "traceloop.entity.output":
+                    value_str = first_item.get("value", "")
+                    if value_str:
+                        inner = json.loads(value_str)
+                        if "outputs" in inner and "kwargs" in inner["outputs"]:
+                            return inner["outputs"]["kwargs"].get("content")
+                        elif "kwargs" in inner and "content" in inner["kwargs"]:
+                            return inner["kwargs"]["content"]
+            elif isinstance(output, dict):
+                if "outputs" in output and "kwargs" in output["outputs"]:
+                    return output["outputs"]["kwargs"].get("content")
+                elif "kwargs" in output and "content" in output["kwargs"]:
+                    return output["kwargs"].get("content")
+        except (json.JSONDecodeError, KeyError, TypeError, IndexError, AttributeError):
+            pass
+        return None
