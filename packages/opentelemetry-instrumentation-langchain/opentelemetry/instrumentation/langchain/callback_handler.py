@@ -1168,23 +1168,22 @@ class TraceloopCallbackHandler(BaseCallbackHandler):
 
 
     def _extract_entity_output_content(self, output: Any) -> Optional[str]:
-        """Extract the actual content from a traceloop.entity.output structure."""
+        """Extract plain text content from LangChain chain outputs."""
         try:
-            if isinstance(output, list) and len(output) > 0:
-                first_item = output[0]
-                if isinstance(first_item, dict) and first_item.get("key") == "traceloop.entity.output":
-                    value_str = first_item.get("value", "")
-                    if value_str:
-                        inner = json.loads(value_str)
-                        if "outputs" in inner and "kwargs" in inner["outputs"]:
-                            return inner["outputs"]["kwargs"].get("content")
-                        elif "kwargs" in inner and "content" in inner["kwargs"]:
-                            return inner["kwargs"]["content"]
-            elif isinstance(output, dict):
-                if "outputs" in output and "kwargs" in output["outputs"]:
-                    return output["outputs"]["kwargs"].get("content")
-                elif "kwargs" in output and "content" in output["kwargs"]:
-                    return output["kwargs"].get("content")
-        except (json.JSONDecodeError, KeyError, TypeError, IndexError, AttributeError):
+            # Direct object with .content (AIMessage, HumanMessage, etc.)
+            if hasattr(output, "content") and isinstance(output.content, str):
+                return output.content
+
+            if isinstance(output, dict):
+                # Common output key names used by LangChain chains
+                for key in ("output", "outputs", "text", "result", "answer", "response"):
+                    val = output.get(key)
+                    if val is None:
+                        continue
+                    if isinstance(val, str):
+                        return val
+                    if hasattr(val, "content") and isinstance(val.content, str):
+                        return val.content
+        except (TypeError, AttributeError):
             pass
         return None
